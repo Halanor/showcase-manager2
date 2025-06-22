@@ -1,24 +1,12 @@
-import { MongoClient } from 'mongodb';
-import Image from 'next/image';
-import ShowcaseController from './models/showcases'
+'use client';
 
-export default async function Home() {
-
-
-    const showcaseController = new ShowcaseController();
-    showcaseController.connect();
-    showcaseController.add('test');
-    showcaseController.close();
-
-    return (
-        <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-            <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-                <div className="text-white text-lg">
-                    <strong>
-                        added{/* Name: {doc.name} {doc.surname} */}
-                    </strong>
-                </div>
-            </main>
-        </div>
-    );
+export default function LandingPage() {
+  return (
+    <div className="min-h-screen flex flex-col bg-[linear-gradient(135deg,#0d1117_30%,#1c2433_100%)] text-gray-100">
+      <div className="flex flex-1 flex-col items-center justify-center">
+        <h1 className="text-5xl font-bold">Welcome to Showcase Manager</h1>
+        <h2 className="text-2xl mt-3 text-gray-400">Your showcases, under control</h2>
+      </div>
+    </div>
+  );
 }
