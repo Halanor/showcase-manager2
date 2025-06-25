@@ -12,7 +12,7 @@ export default function RootLayout({ children }) {
   <head></head>
   <body className="min-h-screen flex">
     <Navbar />
-    <main className="ml-64 flex-1 p-4">
+    <main className="ml-40 flex-1 p-4">
       {children}
     </main>
   </body>
