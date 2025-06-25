@@ -4,9 +4,12 @@ export const showcaseService = {
   async add({ name }) {
     return showcaseDAO.add({
       name,
-      lights: ['spots', 'LED Strip'], 
-      temps: [], 
-      humidity: [], 
+      temperature: 0,
+      humidity: 0,
+      lock: false,
+      led: false,
+      spot: false,
+      light: false,
       createdAt: new Date(),
     });
   },
@@ -21,5 +24,9 @@ export const showcaseService = {
 
   async list() {
     return showcaseDAO.list();
+  },
+
+  async updateBooleanField({ name, field, value }) {
+    return showcaseDAO.updateField({ name, field, value }); 
   },
 };

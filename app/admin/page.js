@@ -1,283 +1,140 @@
-// import { MongoClient } from 'mongodb';
-// import Image from 'next/image';
-// import ShowcaseController from './models/showcases'
-
-// export default async function Home() {
-
-//     const showcaseController = new ShowcaseController();
-//     showcaseController.connect();
-//     showcaseController.add('test');
-//     showcaseController.close();
-
-//     return (
-//         <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-//             <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-//                 <div className="text-white text-lg">
-//                     <strong>
-//                         added{/* Name: {doc.name} {doc.surname} */}
-//                     </strong>
-//                 </div>
-//             </main>
-//         </div>
-//     );
-// }
-
-// 'use client';
-// import { useState, useEffect } from 'react';
-
-// export default function HomePage() {
-//   const [showcases, setShowcases] = useState([]);
-//   const [newName, setNewName] = useState('');
-//   const [removeName, setRemoveName] = useState('');
-//   const [oldName, setOldName] = useState('');
-//   const [newRename, setNewRename] = useState('');
-//   const [tabIndex, setTabIndex] = useState(0);
-
-//   useEffect(() => {
-//     fetchShowcases();
-//   }, []);
-
-//   async function fetchShowcases() {
-//     const res = await fetch('/api/showcases');
-//     const data = await res.json();
-//     setShowcases(data);
-//   }
-
-//   async function handleAdd() {
-//     if (!newName) return;
-//     await fetch('/api/showcases', {
-//       method: 'POST',
-//       headers: { 'Content-Type': 'application/json' },
-//       body: JSON.stringify({ name: newName }),
-//     });
-//     setNewName('');
-//     fetchShowcases();
-//   }
-
-//   async function handleRemove() {
-//     if (!removeName) return;
-//     await fetch('/api/showcases', {
-//       method: 'DELETE',
-//       headers: { 'Content-Type': 'application/json' },
-//       body: JSON.stringify({ name: removeName }),
-//     });
-//     setRemoveName('');
-//     fetchShowcases();
-//   }
-
-//   async function handleRename() {
-//     if (!oldName || !newRename) return;
-//     await fetch('/api/showcases', {
-//       method: 'PATCH',
-//       headers: { 'Content-Type': 'application/json' },
-//       body: JSON.stringify({ oldName, newName: newRename }),
-//     });
-//     setOldName('');
-//     setNewRename('');
-//     fetchShowcases();
-//   }
-
-//   return (
-//       <div className="min-h-screen text-gray-100
-//           pt-8 pb-8 bg-[linear-gradient(135deg,#0a0c10_20%,#1f2937_100%)]"
-//       >
-
-//       <div className="max-w-2xl mx-auto">
-//         <h1 className="text-5xl font-bold text-center">Showcase Manager</h1>
-//         <h2 className="text-3xl font-bold text-center mt-2">Manage Showcases</h2>
-
-//         <div className="flex justify-center mt-4 space-x-4 text-gray-400">
-//           <button
-//             className={`pb-2 font-bold ${tabIndex === 0 ? 'border-b-2 border-[#0ff] text-[#0ff]' : ''}`}
-//             onClick={() => setTabIndex(0)}
-//           >
-//             Add
-//           </button>
-//           <button
-//             className={`pb-2 font-bold ${tabIndex === 1 ? 'border-b-2 border-[#0ff] text-[#0ff]' : ''}`}
-//             onClick={() => setTabIndex(1)}
-//           >
-//             Remove
-//           </button>
-//           <button
-//             className={`pb-2 font-bold ${tabIndex === 2 ? 'border-b-2 border-[#0ff] text-[#0ff]' : ''}`}
-//             onClick={() => setTabIndex(2)}
-//           >
-//             Rename
-//           </button>
-//         </div>
-
-//         {tabIndex === 0 && (
-//           <div className="bg-[#1c2433] rounded-xl p-4 mt-4 w-1/2 mx-auto flex flex-col space-y-3">
-//             <input
-//               className="bg-[#1c2433] rounded p-3 text-gray-100 focus:outline-none focus:ring-2 focus:ring-[#ff0080]"
-//               placeholder="New Showcase Name"
-//               value={newName}
-//               onChange={(e) => setNewName(e.target.value)}
-//             />
-//             <button
-//               className="bg-[#0ff] text-[#0d1117] font-bold rounded-full p-3 hover:brightness-125"
-//               onClick={handleAdd}
-//             >
-//               Add Showcase
-//             </button>
-//           </div>
-//         )}
-
-//         {tabIndex === 1 && (
-//           <div className="bg-[#1c2433] rounded-xl p-4 mt-4 w-1/2 mx-auto flex flex-col space-y-3">
-//             <input
-//               className="bg-[#1c2433] rounded p-3 text-gray-100 focus:outline-none focus:ring-2 focus:ring-[#ff0080]"
-//               placeholder="Showcase Name to Remove"
-//               value={removeName}
-//               onChange={(e) => setRemoveName(e.target.value)}
-//             />
-//             <button
-//               className="bg-[#ff0080] text-[#0d1117] font-bold rounded-full p-3 hover:brightness-125"
-//               onClick={handleRemove}
-//             >
-//               Remove Showcase
-//             </button>
-//           </div>
-//         )}
-
-//         {tabIndex === 2 && (
-//           <div className="bg-[#1c2433] rounded-xl p-4 mt-4 w-1/2 mx-auto flex flex-col space-y-3">
-//             <input
-//               className="bg-[#1c2433] rounded p-3 text-gray-100 focus:outline-none focus:ring-2 focus:ring-[#ff0080]"
-//               placeholder="Old Name"
-//               value={oldName}
-//               onChange={(e) => setOldName(e.target.value)}
-//             />
-//             <input
-//               className="bg-[#1c2433] rounded p-3 text-gray-100 focus:outline-none focus:ring-2 focus:ring-[#ff0080]"
-//               placeholder="New Name"
-//               value={newRename}
-//               onChange={(e) => setNewRename(e.target.value)}
-//             />
-//             <button
-//               className="bg-[#0ff] text-[#0d1117] font-bold rounded-full p-3 hover:brightness-125"
-//               onClick={handleRename}
-//             >
-//               Rename Showcase
-//             </button>
-//           </div>
-//         )}
-
-//         <h3 className="text-3xl font-bold text-center mt-6">Current Showcases</h3>
-//         <div className="flex flex-wrap justify-center mt-4">
-//           {showcases.map((showcase, index) => {
-//             const lastTemp = Array.isArray(showcase.temps) && showcase.temps.length > 0
-//               ? showcase.temps[showcase.temps.length - 1]
-//               : 'N/A';
-//             const lastHumidity = Array.isArray(showcase.humidity) && showcase.humidity.length > 0
-//               ? showcase.humidity[showcase.humidity.length - 1]
-//               : 'N/A';
-//             const isLightOn = showcase.light && showcase.light.toLowerCase() === 'on';
-//             return (
-//               <div
-//                 key={index}
-//                 className={`rounded-xl p-3 m-2 flex flex-col items-center text-center flex-1 max-w-[21%]`}
-//                 style={{
-//                   background: 'linear-gradient(160deg, #1c2433, #0d1117)',
-//                   boxShadow: isLightOn
-//                     ? '0px 0px 12px #0ff'
-//                     : '0px 0px 12px #ff0080',
-//                   border: `2px solid ${isLightOn ? '#0ff' : '#ff0080'}`,
-//                 }}
-//               >
-//                 <div className="text-lg font-bold">{showcase.name}</div>
-//                 <div className="text-sm text-gray-300">Temperature: {lastTemp} °</div>
-//                 <div className="text-sm text-gray-300">Humidity: {lastHumidity} %</div>
-//                 <div className="text-sm text-gray-300">Light: {showcase.light || 'N/A'}</div>
-//               </div>
-//             );
-//           })}
-//         </div>
-//       </div>
-//     </div>
-//   );
-// }
-
 'use client';
 import { useState, useEffect } from 'react';
-import AdminHeader from '../components/AdminHeader';
-import ShowcaseForm from '../components/ShowcaseForm';
-import ShowcaseList from '../components/ShowcaseList';
 import Card from '../components/Card';
 
 export default function AdminPage() {
-	const [showcases, setShowcases] = useState([]);
-	const [newName, setNewName] = useState('');
-	const [removeName, setRemoveName] = useState('');
-	const [oldName, setOldName] = useState('');
-	const [newRename, setNewRename] = useState('');
-	const [tabIndex, setTabIndex] = useState(0);
+  const [showcases, setShowcases] = useState([]);
+  const [newName, setNewName] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-	useEffect(() => {
-		fetchShowcases();
-	}, []);
+  useEffect(() => {
+    fetchShowcases();
+  }, []);
 
-	async function fetchShowcases() {
-		const res = await fetch('/api/showcases');
-		const data = await res.json();
-		setShowcases(data);
-	}
+  async function fetchShowcases() {
+    const res = await fetch('/api/showcases');
+    const data = await res.json();
+    setShowcases(data);
+  }
 
-	async function handleAdd() {
-		if (!newName) return;
-		await fetch('/api/showcases', {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ name: newName }),
-		});
-		setNewName('');
-		fetchShowcases();
-	}
+  async function handleAdd() {
+    if (!newName) return;
 
-	async function handleRemove() {
-		if (!removeName) return;
-		await fetch('/api/showcases', {
-			method: 'DELETE',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ name: removeName }),
-		});
-		setRemoveName('');
-		fetchShowcases();
-	}
+    await fetch('/api/showcases', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: newName }),
+    });
+    setNewName('');
+    setIsModalOpen(false);
+    fetchShowcases();
+  }
 
-	async function handleRename() {
-		if (!oldName || !newRename) return;
-		await fetch('/api/showcases', {
-			method: 'PATCH',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ oldName, newName: newRename }),
-		});
-		setOldName('');
-		setNewRename('');
-		fetchShowcases();
-	}
+  async function handleLockChange(showcaseName, checked) {
+    await fetch(`/api/showcases/${showcaseName}/lock`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ value: checked }),
+    });
+    fetchShowcases();
+  }
 
-	return (
-		<div className="min-h-screen text-gray-100 pt-8 pb-8 bg-gray-300">
-			<div className="max-w-2xl mx-auto">
-				<AdminHeader tabIndex={tabIndex} setTabIndex={setTabIndex} />
-				<ShowcaseForm
-					tabIndex={tabIndex}
-					newName={newName}
-					removeName={removeName}
-					oldName={oldName}
-					newRename={newRename}
-					setNewName={setNewName}
-					setRemoveName={setRemoveName}
-					setOldName={setOldName}
-					setNewRename={setNewRename}
-					handleAdd={handleAdd}
-					handleRemove={handleRemove}
-					handleRename={handleRename}
-				/>
-				<ShowcaseList showcases={showcases} />
-			</div>
-		</div>
-	);
+  async function handleLedChange(showcaseName, checked) {
+    await fetch(`/api/showcases/${showcaseName}/led`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ value: checked }),
+    });
+    fetchShowcases();
+  }
+
+  async function handleSpotChange(showcaseName, checked) {
+    await fetch(`/api/showcases/${showcaseName}/spot`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ value: checked }),
+    });
+    fetchShowcases();
+  }
+
+  async function handleLightChange(showcaseName, checked) {
+    await fetch(`/api/showcases/${showcaseName}/light`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ value: checked }),
+    });
+    fetchShowcases();
+  }
+
+  return (
+    <div className="min-h-screen text-gray-800 pt-8 pb-8 bg-gray-100">
+      <div className="max-w-7xl mx-auto">
+        <h3 className="text-3xl font-bold text-center mt-6">Current Showcases</h3>
+        <div className="flex flex-wrap justify-center gap-4 mt-4">
+          {showcases.map((showcase) => {
+            const temperature =
+              Array.isArray(showcase.temps) && showcase.temps.length > 0
+                ? showcase.temps[showcase.temps.length - 1]
+                : 'N/A';
+            const humidity =
+              Array.isArray(showcase.humidity) && showcase.humidity.length > 0
+                ? showcase.humidity[showcase.humidity.length - 1]
+                : 'N/A';
+            return (
+              <Card
+                key={showcase.name}
+                showcaseName={showcase.name}
+                temperature={temperature}
+                humidity={humidity}
+                lockOn={!!showcase.lock}
+                ledOn={!!showcase.led}
+                spotOn={!!showcase.spot}
+                lightOn={!!showcase.light}
+                onLockChange={(e) => handleLockChange(showcase.name, e.target.checked)}
+                onLedChange={(e) => handleLedChange(showcase.name, e.target.checked)}
+                onSpotChange={(e) => handleSpotChange(showcase.name, e.target.checked)}
+                onLightChange={(e) => handleLightChange(showcase.name, e.target.checked)}
+              />
+            );
+          })}
+          <Card isAddCard onAddClick={() => setIsModalOpen(true)} />
+        </div>
+
+        {/* MODAL */}
+        <div
+          className={`fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50
+            transition-opacity duration-300 ${isModalOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
+        >
+          <div
+            className={`bg-white rounded-lg p-6 w-80 flex flex-col space-y-4
+              transform transition-transform duration-300 ${isModalOpen ? 'scale-100 opacity-100' : 'scale-90 opacity-0'}`}
+          >
+            <h2 className="text-gray-800 text-xl font-bold">Add New Showcase</h2>
+            <input
+              type="text"
+              placeholder="Enter new showcase name"
+              className="border rounded p-2 text-gray-800"
+              value={newName}
+              onChange={(e) => setNewName(e.target.value)}
+            />
+            <div className="flex justify-end space-x-3">
+              <button
+                className="bg-gray-300 text-gray-800 font-bold rounded-full px-4 py-2 hover:brightness-125"
+                onClick={() => setIsModalOpen(false)}
+              >
+                Cancel
+              </button>
+              <button
+                className="bg-cyan-500 text-gray-800 font-bold rounded-full px-4 py-2 hover:brightness-125"
+                onClick={handleAdd}
+              >
+                Add
+              </button>
+            </div>
+          </div>
+        </div>
+        {/* END MODAL */}
+      </div>
+    </div>
+  );
 }

@@ -1,71 +1,28 @@
-import React, { useState } from 'react';
+'use client';
+import React from 'react';
 
-const ToggleControls = () => {
-	const [humanHelp, setHumanHelp] = useState(false);
-	const [finishConversation, setFinishConversation] = useState(false);
-
-	return (
-		<div className="flex flex-col items-center justify-center min-h-screen space-y-6">
-			{/* Toggle Section */}
-			<div className="space-y-4 text-center">
-				<div className="text-gray-800 font-semibold">
-					Enable/Disable the action buttons for human help and finish
-					conversation
-				</div>
-
-				{/* Human Help Toggle */}
-				<div className="flex items-center justify-between w-64">
-					<span className="text-lg font-semibold text-gray-800">
-						Human Help
-					</span>
-					<label className="relative inline-flex items-center cursor-pointer">
-						<input
-							type="checkbox"
-							className="sr-only peer"
-							checked={humanHelp}
-							onChange={() => setHumanHelp(!humanHelp)}
-						/>
-						<div className="w-11 h-6 bg-gray-300 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-gray-500 rounded-full peer dark:bg-gray-700 peer-checked:bg-black"></div>
-						<div className="absolute left-0.5 top-0.5 w-5 h-5 bg-white border border-gray-300 rounded-full transition-transform peer-checked:translate-x-full"></div>
-					</label>
-				</div>
-
-				{/* Finish Conversation Toggle */}
-				<div className="flex items-center justify-between w-64">
-					<span className="text-lg font-semibold text-gray-800">
-						Finish Conversation
-					</span>
-					<label className="relative inline-flex items-center cursor-pointer">
-						<input
-							type="checkbox"
-							className="sr-only peer"
-							checked={finishConversation}
-							onChange={() =>
-								setFinishConversation(!finishConversation)
-							}
-						/>
-						<div className="w-11 h-6 bg-gray-300 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-gray-500 rounded-full peer dark:bg-gray-700 peer-checked:bg-black"></div>
-						<div className="absolute left-0.5 top-0.5 w-5 h-5 bg-white border border-gray-300 rounded-full transition-transform peer-checked:translate-x-full"></div>
-					</label>
-				</div>
-			</div>
-
-			{/* Footnote Section */}
-			<div className="p-4 text-center text-gray-500">
-				<p>
-					Inspired by{' '}
-					<a
-						href="https://galichat.com"
-						className="text-blue-500 underline"
-						target="_blank"
-						rel="noopener noreferrer"
-					>
-						galichat.com
-					</a>
-				</p>
-			</div>
-		</div>
-	);
+const ToggleButton = ({ label, checked, onChange }) => {
+  return (
+    <div className="flex items-center justify-between space-x-2">
+      <span className="text-gray-800 font-medium">{label}</span>
+      <label className="relative inline-flex items-center cursor-pointer">
+        <input
+          type="checkbox"
+          className="sr-only peer"
+          checked={checked}
+          onChange={onChange}
+        />
+        <div
+          className={`w-11 h-6 rounded-full peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-gray-500
+            ${checked ? 'bg-blue-500' : 'bg-gray-300'}`}
+        />
+        <div
+          className={`absolute left-0.5 top-0.5 w-5 h-5 rounded-full border border-gray-300 bg-white 
+            transition-transform ${checked ? 'translate-x-full' : ''}`}
+        />
+      </label>
+    </div>
+  );
 };
 
-export default ToggleControls;
+export default ToggleButton;

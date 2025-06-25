@@ -32,5 +32,15 @@ export const showcaseController = {
     await showcaseService.rename({ oldName, newName });
     return Response.json({ message: `Showcase "${oldName}" renamed to "${newName}"` });
   },
+
+  async updateBooleanField(request, name, field) {
+    const { value } = await request.json();
+    if (typeof value !== 'boolean') {
+      return new Response(`Invalid value for ${field}`, { status: 400 });
+    }
+    await showcaseService.updateBooleanField({ name, field, value }); 
+    return Response.json({ message: `${field} updated for ${name}` });
+  },
 };
+
 

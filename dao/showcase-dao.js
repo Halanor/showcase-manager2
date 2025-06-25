@@ -36,6 +36,11 @@ class ShowcaseDAO {
     return collection.find({}).toArray();
   }
 
+  async updateField({ name, field, value }) {
+    const collection = await this.connect();
+    return collection.updateOne({ name }, { $set: { [field]: value } }); 
+  }
+
   async close() {
     if (this.client?.topology?.isConnected()) {
       await this.client.close();
@@ -44,3 +49,4 @@ class ShowcaseDAO {
 }
 
 export const showcaseDAO = new ShowcaseDAO();
+
