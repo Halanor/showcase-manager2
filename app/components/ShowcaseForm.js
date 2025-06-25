@@ -3,110 +3,108 @@
 import { useRef, useState, useEffect } from 'react';
 
 export default function ShowcaseForm({
-  tabIndex,
-  newName,
-  removeName,
-  oldName,
-  newRename,
-  setNewName,
-  setRemoveName,
-  setOldName,
-  setNewRename,
-  handleAdd,
-  handleRemove,
-  handleRename,
+	tabIndex,
+	newName,
+	removeName,
+	oldName,
+	newRename,
+	setNewName,
+	setRemoveName,
+	setOldName,
+	setNewRename,
+	handleAdd,
+	handleRemove,
+	handleRename,
 }) {
-  const [maxHeight, setMaxHeight] = useState(0);
-  const [showRenameButton, setShowRenameButton] = useState(false);
-  const formRef = useRef(null);
+	const [maxHeight, setMaxHeight] = useState(0);
+	const [showRenameButton, setShowRenameButton] = useState(false);
+	const formRef = useRef(null);
 
-  useEffect(() => {
-    if (formRef.current) {
-      setMaxHeight(formRef.current.scrollHeight);
-      if (tabIndex === 2) {
-        setShowRenameButton(false);
-        const timeout = setTimeout(() => {
-          setShowRenameButton(true);
-        }, 500);
-        return () => clearTimeout(timeout);
-      } else {
-        setShowRenameButton(false);
-      }
-    }
-  }, [tabIndex]);
+	useEffect(() => {
+		if (formRef.current) {
+			setMaxHeight(formRef.current.scrollHeight);
+			if (tabIndex === 2) {
+				setShowRenameButton(false);
+				const timeout = setTimeout(() => {
+					setShowRenameButton(true);
+				}, 500);
+				return () => clearTimeout(timeout);
+			} else {
+				setShowRenameButton(false);
+			}
+		}
+	}, [tabIndex]);
 
-  return (
-    <div
-      className="bg-[#1c2433] rounded-xl mt-4 w-1/2 mx-auto overflow-hidden transition-[max-height] duration-500 ease-in-out"
-      style={{ maxHeight }}
-    >
-      <div ref={formRef}>
-        <div className="flex flex-col space-y-3 justify-center items-center p-4">
-          
-          {tabIndex === 0 && (
-            <>
-              <input
-                className="bg-[#1c2433] rounded p-3 text-gray-100 focus:outline-none focus:ring-2 focus:ring-[#ff0080] w-full text-center"
-                placeholder="New Showcase Name"
-                value={newName}
-                onChange={(e) => setNewName(e.target.value)}
-              />
+	return (
+		<div
+			className="bg-gray-400 rounded-xl mt-4 w-1/2 mx-auto overflow-hidden transition-[max-height] duration-500 ease-in-out"
+			style={{ maxHeight }}
+		>
+			<div ref={formRef}>
+				<div className="flex flex-col space-y-3 justify-center items-center p-4">
+					{tabIndex === 0 && (
+						<>
+							<input
+								className="bg-gray-200 rounded p-3 text-gray-100 focus:outline-none focus:ring-2 focus:ring-[#000] w-full text-center"
+								placeholder="New Showcase Name"
+								value={newName}
+								onChange={e => setNewName(e.target.value)}
+							/>
 
-              <button
-                className="bg-[#0ff] text-[#0d1117] font-bold rounded-full p-3 hover:brightness-125"
-                onClick={handleAdd}
-              >
-                Add Showcase
-              </button>
-            </>
-          )}
-          
-          {tabIndex === 1 && (
-            <>
-              <input
-                className="bg-[#1c2433] rounded p-3 text-gray-100 focus:outline-none focus:ring-2 focus:ring-[#ff0080] w-full text-center"
-                placeholder="Showcase Name to Remove"
-                value={removeName}
-                onChange={(e) => setRemoveName(e.target.value)}
-              />
+							<button
+								className="bg-gray-300 text-[#000] font-bold rounded-full p-3 hover:brightness-125"
+								onClick={handleAdd}
+							>
+								Add Showcase
+							</button>
+						</>
+					)}
 
-              <button
-                className="bg-[#ff0080] text-[#0d1117] font-bold rounded-full p-3 hover:brightness-125"
-                onClick={handleRemove}
-              >
-                Remove Showcase
-              </button>
-            </>
-          )}
+					{tabIndex === 1 && (
+						<>
+							<input
+								className="bg-gray-200 rounded p-3 text-gray-100 focus:outline-none focus:ring-2 focus:ring-[#000] w-full text-center"
+								placeholder="Showcase Name to Remove"
+								value={removeName}
+								onChange={e => setRemoveName(e.target.value)}
+							/>
 
-          
-          {tabIndex === 2 && (
-            <>
-              <input
-                className="bg-[#1c2433] rounded p-3 text-gray-100 focus:outline-none focus:ring-2 focus:ring-[#ff0080] w-full text-center"
-                placeholder="Old Name"
-                value={oldName}
-                onChange={(e) => setOldName(e.target.value)}
-              />
-              <input
-                className="bg-[#1c2433] rounded p-3 text-gray-100 focus:outline-none focus:ring-2 focus:ring-[#ff0080] w-full text-center"
-                placeholder="New Name"
-                value={newRename}
-                onChange={(e) => setNewRename(e.target.value)}
-              />
+							<button
+								className="bg-gray-300 text-[#000] font-bold rounded-full p-3 hover:brightness-125"
+								onClick={handleRemove}
+							>
+								Remove Showcase
+							</button>
+						</>
+					)}
 
-              <button
-                className={`bg-[#0ff] text-[#0d1117] font-bold rounded-full p-3 hover:brightness-125 
+					{tabIndex === 2 && (
+						<>
+							<input
+								className="bg-gray-200 rounded p-3 text-gray-100 focus:outline-none focus:ring-2 focus:ring-[#000] w-full text-center"
+								placeholder="Old Name"
+								value={oldName}
+								onChange={e => setOldName(e.target.value)}
+							/>
+							<input
+								className="bg-gray-200 rounded p-3 text-gray-100 focus:outline-none focus:ring-2 focus:ring-[#000] w-full text-center"
+								placeholder="New Name"
+								value={newRename}
+								onChange={e => setNewRename(e.target.value)}
+							/>
+
+							<button
+								className={`bg-gray-300 text-[#000] font-bold rounded-full p-3 hover:brightness-125 
                            transition-opacity duration-300 ease-in-out 
                            ${showRenameButton ? 'opacity-100' : 'opacity-0'}`}
-                onClick={handleRename}
-              >
-                Rename Showcase
-              </button>
-            </>
-          )}
-        </div>
-      </div>
-    </div>
-  );
+								onClick={handleRename}
+							>
+								Rename Showcase
+							</button>
+						</>
+					)}
+				</div>
+			</div>
+		</div>
+	);
 }

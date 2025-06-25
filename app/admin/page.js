@@ -4,7 +4,6 @@
 
 // export default async function Home() {
 
-
 //     const showcaseController = new ShowcaseController();
 //     showcaseController.connect();
 //     showcaseController.add('test');
@@ -79,10 +78,9 @@
 //   }
 
 //   return (
-//       <div className="min-h-screen text-gray-100 
+//       <div className="min-h-screen text-gray-100
 //           pt-8 pb-8 bg-[linear-gradient(135deg,#0a0c10_20%,#1f2937_100%)]"
 //       >
-
 
 //       <div className="max-w-2xl mx-auto">
 //         <h1 className="text-5xl font-bold text-center">Showcase Manager</h1>
@@ -206,85 +204,80 @@ import { useState, useEffect } from 'react';
 import AdminHeader from '../components/AdminHeader';
 import ShowcaseForm from '../components/ShowcaseForm';
 import ShowcaseList from '../components/ShowcaseList';
+import Card from '../components/Card';
 
 export default function AdminPage() {
-  const [showcases, setShowcases] = useState([]);
-  const [newName, setNewName] = useState('');
-  const [removeName, setRemoveName] = useState('');
-  const [oldName, setOldName] = useState('');
-  const [newRename, setNewRename] = useState('');
-  const [tabIndex, setTabIndex] = useState(0);
+	const [showcases, setShowcases] = useState([]);
+	const [newName, setNewName] = useState('');
+	const [removeName, setRemoveName] = useState('');
+	const [oldName, setOldName] = useState('');
+	const [newRename, setNewRename] = useState('');
+	const [tabIndex, setTabIndex] = useState(0);
 
-  useEffect(() => {
-    fetchShowcases();
-  }, []);
+	useEffect(() => {
+		fetchShowcases();
+	}, []);
 
-  async function fetchShowcases() {
-    const res = await fetch('/api/showcases');
-    const data = await res.json();
-    setShowcases(data);
-  }
+	async function fetchShowcases() {
+		const res = await fetch('/api/showcases');
+		const data = await res.json();
+		setShowcases(data);
+	}
 
-  async function handleAdd() {
-    if (!newName) return;
-    await fetch('/api/showcases', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name: newName }),
-    });
-    setNewName('');
-    fetchShowcases();
-  }
+	async function handleAdd() {
+		if (!newName) return;
+		await fetch('/api/showcases', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ name: newName }),
+		});
+		setNewName('');
+		fetchShowcases();
+	}
 
-  async function handleRemove() {
-    if (!removeName) return;
-    await fetch('/api/showcases', {
-      method: 'DELETE',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name: removeName }),
-    });
-    setRemoveName('');
-    fetchShowcases();
-  }
+	async function handleRemove() {
+		if (!removeName) return;
+		await fetch('/api/showcases', {
+			method: 'DELETE',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ name: removeName }),
+		});
+		setRemoveName('');
+		fetchShowcases();
+	}
 
-  async function handleRename() {
-    if (!oldName || !newRename) return;
-    await fetch('/api/showcases', {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ oldName, newName: newRename }),
-    });
-    setOldName('');
-    setNewRename('');
-    fetchShowcases();
-  }
+	async function handleRename() {
+		if (!oldName || !newRename) return;
+		await fetch('/api/showcases', {
+			method: 'PATCH',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ oldName, newName: newRename }),
+		});
+		setOldName('');
+		setNewRename('');
+		fetchShowcases();
+	}
 
-  return (
-    <div className="min-h-screen text-gray-100 pt-8 pb-8 bg-[linear-gradient(135deg,#0d1117_30%,#1c2433_100%)]">
-      <div className="max-w-2xl mx-auto">
-        <AdminHeader tabIndex={tabIndex} setTabIndex={setTabIndex} />
-        <ShowcaseForm
-          tabIndex={tabIndex}
-          newName={newName}
-          removeName={removeName}
-          oldName={oldName}
-          newRename={newRename}
-          setNewName={setNewName}
-          setRemoveName={setRemoveName}
-          setOldName={setOldName}
-          setNewRename={setNewRename}
-          handleAdd={handleAdd}
-          handleRemove={handleRemove}
-          handleRename={handleRename}
-        />
-        <ShowcaseList showcases={showcases} />
-      </div>
-    </div>
-  );
+	return (
+		<div className="min-h-screen text-gray-100 pt-8 pb-8 bg-gray-300">
+			<div className="max-w-2xl mx-auto">
+				<AdminHeader tabIndex={tabIndex} setTabIndex={setTabIndex} />
+				<ShowcaseForm
+					tabIndex={tabIndex}
+					newName={newName}
+					removeName={removeName}
+					oldName={oldName}
+					newRename={newRename}
+					setNewName={setNewName}
+					setRemoveName={setRemoveName}
+					setOldName={setOldName}
+					setNewRename={setNewRename}
+					handleAdd={handleAdd}
+					handleRemove={handleRemove}
+					handleRename={handleRename}
+				/>
+				<ShowcaseList showcases={showcases} />
+			</div>
+		</div>
+	);
 }
-
-
-
-
-
-
