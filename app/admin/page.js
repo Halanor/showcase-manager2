@@ -6,6 +6,8 @@ export default function AdminPage() {
   const [showcases, setShowcases] = useState([]);
   const [newName, setNewName] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [showErrorModal, setShowErrorModal] = useState(false);
 
   useEffect(() => {
     fetchShowcases();
@@ -20,6 +22,12 @@ export default function AdminPage() {
   async function handleAdd() {
     if (!newName) return;
 
+    if (showcases.some((showcase) => showcase.name.toLowerCase() === newName.toLowerCase())) {
+      setErrorMessage(`A showcase named "${newName}" already exists!`);
+      setShowErrorModal(true);
+      return;
+    }
+
     await fetch('/api/showcases', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -27,6 +35,30 @@ export default function AdminPage() {
     });
     setNewName('');
     setIsModalOpen(false);
+    fetchShowcases();
+  }
+
+  async function handleRename(oldName, newName) {
+    if (!newName || oldName === newName) return;
+
+    if (showcases.some((showcase) => showcase.name.toLowerCase() === newName.toLowerCase())) {
+      setErrorMessage(`A showcase named "${newName}" already exists! Please pick a different name.`);
+      setShowErrorModal(true);
+      return;
+    }
+
+    const res = await fetch(`/api/showcases`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ oldName, newName }),
+    });
+
+    if (!res.ok) {
+      setErrorMessage(`Error renaming showcase. Status ${res.status}`);
+      setShowErrorModal(true);
+      return;
+    }
+
     fetchShowcases();
   }
 
@@ -66,26 +98,31 @@ export default function AdminPage() {
     fetchShowcases();
   }
 
+  const handleErrorKeyDown = (e) => {
+    if (e.key === 'Enter' || e.key === 'Escape') {
+      setShowErrorModal(false);
+      setErrorMessage('');
+    }
+  };
+  
   return (
     <div className="min-h-screen text-gray-800 pt-8 pb-8 bg-gray-100">
       <div className="max-w-7xl mx-auto">
         <h3 className="text-3xl font-bold text-center mt-6">Current Showcases</h3>
         <div className="flex flex-wrap justify-center gap-4 mt-4">
           {showcases.map((showcase) => {
-            const temperature =
-              Array.isArray(showcase.temps) && showcase.temps.length > 0
-                ? showcase.temps[showcase.temps.length - 1]
-                : 'N/A';
-            const humidity =
-              Array.isArray(showcase.humidity) && showcase.humidity.length > 0
-                ? showcase.humidity[showcase.humidity.length - 1]
-                : 'N/A';
+            const lastTemp = Array.isArray(showcase.temps) && showcase.temps.length > 0
+              ? showcase.temps[0]
+              : 'N/A';
+            const lastHumidity = Array.isArray(showcase.humidity) && showcase.humidity.length > 0
+              ? showcase.humidity[0]
+              : 'N/A';
             return (
               <Card
                 key={showcase.name}
                 showcaseName={showcase.name}
-                temperature={temperature}
-                humidity={humidity}
+                temperature={lastTemp}
+                humidity={lastHumidity}
                 lockOn={!!showcase.lock}
                 ledOn={!!showcase.led}
                 spotOn={!!showcase.spot}
@@ -94,13 +131,14 @@ export default function AdminPage() {
                 onLedChange={(e) => handleLedChange(showcase.name, e.target.checked)}
                 onSpotChange={(e) => handleSpotChange(showcase.name, e.target.checked)}
                 onLightChange={(e) => handleLightChange(showcase.name, e.target.checked)}
+                onRename={(oldName, newName) => handleRename(oldName, newName)}
               />
             );
           })}
           <Card isAddCard onAddClick={() => setIsModalOpen(true)} />
         </div>
 
-        {/* MODAL */}
+        {/* ADD MODAL */}
         <div
           className={`fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50
             transition-opacity duration-300 ${isModalOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
@@ -133,7 +171,45 @@ export default function AdminPage() {
             </div>
           </div>
         </div>
-        {/* END MODAL */}
+
+        {/* ERROR MODAL */}
+          <div
+            className={`fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50
+              transition-opacity duration-300 ${showErrorModal ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
+            tabIndex={0}
+            ref={(el) => {
+              if (el && showErrorModal) {
+                el.focus();
+              }
+            }}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === 'Escape') {
+                setShowErrorModal(false);
+                setErrorMessage('');
+              }
+            }}
+          >
+            <div
+              className={`bg-white rounded-lg p-6 w-80 flex flex-col space-y-4
+                transform transition-transform duration-300 ${showErrorModal ? 'scale-100 opacity-100' : 'scale-90 opacity-0'}`}
+            >
+              <h2 className="text-red-600 text-xl font-bold">Error</h2>
+              <p className="text-gray-800">{errorMessage}</p>
+              <div className="flex justify-end">
+                <button
+                  className="bg-gray-300 text-gray-800 font-bold rounded-full px-4 py-2 hover:brightness-125"
+                  onClick={() => {
+                    setShowErrorModal(false);
+                    setErrorMessage('');
+                  }}
+                >
+                  Ok
+                </button>
+              </div>
+            </div>
+          </div>
+          {/* END ERROR MODAL */}
+
       </div>
     </div>
   );

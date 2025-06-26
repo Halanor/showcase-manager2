@@ -26,7 +26,11 @@ export const showcaseService = {
     return showcaseDAO.list();
   },
 
+  async findByName({ name }) {
+    return showcaseDAO.findByName(name);
+  },
+
   async updateBooleanField({ name, field, value }) {
-    return showcaseDAO.updateField({ name, field, value }); 
+    return showcaseDAO.updateField({ name, field, value });
   },
 };

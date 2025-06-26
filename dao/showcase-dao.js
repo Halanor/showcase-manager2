@@ -36,6 +36,11 @@ class ShowcaseDAO {
     return collection.find({}).toArray();
   }
 
+  async findByName(name) {
+    const collection = await this.connect();
+    return collection.findOne({ name }); // Returns the showcase if found
+  }
+
   async updateField({ name, field, value }) {
     const collection = await this.connect();
     return collection.updateOne({ name }, { $set: { [field]: value } }); 
@@ -49,4 +54,3 @@ class ShowcaseDAO {
 }
 
 export const showcaseDAO = new ShowcaseDAO();
-

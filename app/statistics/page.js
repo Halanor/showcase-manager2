@@ -88,27 +88,22 @@ export default function StatisticsPage() {
           <LineChart data={data}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="time" />
-            
-            {(displayOption === 'temp' || displayOption === 'both') && (
-              <YAxis
-                yAxisId="temp"
-                label={{ value: 'Temp (°C)', angle: -90, position: 'insideLeft' }}
-                domain={[0, 50]}
-              />
-            )}
-            
-            {(displayOption === 'humidity' || displayOption === 'both') && (
-              <YAxis
-                yAxisId="humidity"
-                orientation="right"
-                label={{ value: 'Humidity (%)', angle: 90, position: 'insideRight' }}
-                domain={[0, 70]}
-              />
-            )}
-            
+            {/* Always include BOTH Y Axes, regardless of the display option */}
+            <YAxis
+              yAxisId="temp"
+              label={{ value: 'Temp (°C)', angle: -90, position: 'insideLeft' }}
+              domain={[0, 50]}
+            />
+            <YAxis
+              yAxisId="humidity"
+              orientation="right"
+              label={{ value: 'Humidity (%)', angle: 90, position: 'insideRight' }}
+              domain={[0, 70]}
+              tickMargin={10}
+              width={60}
+            />
             <Tooltip />
             <Legend />
-
             {(displayOption === 'temp' || displayOption === 'both') && (
               <Line
                 yAxisId="temp"
@@ -119,7 +114,6 @@ export default function StatisticsPage() {
                 dot={false}
               />
             )}
-            
             {(displayOption === 'humidity' || displayOption === 'both') && (
               <Line
                 yAxisId="humidity"

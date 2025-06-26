@@ -1,37 +1,50 @@
 'use client';
-import React from 'react';
+import React, { useState } from 'react';
 import ToggleButton from './ToggleButton';
 
 const Card = ({ 
-  showcaseName, 
-  temperature, 
-  humidity, 
-  lockOn, 
-  ledOn, 
-  spotOn, 
+  showcaseName,
+  temperature,
+  humidity,
+  lockOn,
+  ledOn,
+  spotOn,
   lightOn,
   onLockChange,
   onLedChange,
   onSpotChange,
   onLightChange,
   isAddCard,
-  onAddClick
+  onAddClick,
+  onRename,
 }) => {
- if (isAddCard) {
-  return (
-    <div
-      className="flex flex-col items-center justify-center rounded-2xl border-2 border-gray-300 bg-gray-100 p-4 cursor-pointer hover:border-gray-400"
-      style={{ width: '250px', height: '300px' }}
-      onClick={onAddClick}
-    >
-      <div className="flex items-center justify-center rounded-full border-2 border-gray-400 w-16 h-16">
-        <span className="text-gray-500 text-4xl font-thin">+</span>
+  const [isEditing, setIsEditing] = useState(false);
+  const [newName, setNewName] = useState(showcaseName);
+
+  if (isAddCard) {
+    return (
+      <div
+        className="flex flex-col items-center justify-center rounded-2xl border-2 border-gray-300 bg-gray-100 p-4 cursor-pointer hover:border-gray-400"
+        style={{ width: '250px', height: '300px' }}
+        onClick={onAddClick}
+      >
+        <div className="text-gray-500 text-6xl font-thin">+</div>
       </div>
-    </div>
-  );
-}
+    );
+  }
 
-
+  const handleRename = async (e) => {
+    if (e.key === 'Enter') {
+      if (newName.trim() && newName.trim() !== showcaseName) {
+        await onRename(showcaseName, newName.trim());
+      }
+      setIsEditing(false);
+    } else if (e.key === 'Escape') {
+      setIsEditing(false);
+      setNewName(showcaseName);
+    }
+  };
+  
   return (
     <div className="rounded-xl border border-gray-300 overflow-hidden bg-white text-gray-800 shadow hover:shadow-lg flex flex-col" style={{ width: '250px' }}>
       {/* IMAGE ON TOP */}
@@ -41,8 +54,31 @@ const Card = ({
           alt={showcaseName}
           className="object-cover w-full h-full"
         />
-        <div className="absolute bottom-0 w-full bg-gray-800 bg-opacity-30 text-white text-left pl-2 py-1 font-semi-bold">
-          {showcaseName}
+        <div className="absolute bottom-0 w-full bg-gray-800 bg-opacity-30 text-white flex items-center justify-between pl-2 pr-2 py-1 font-semibold">
+          
+          {isEditing ? (
+            <input
+              value={newName}
+              onChange={(e) => setNewName(e.target.value)}
+              onKeyDown={handleRename}
+              className="bg-gray-100 rounded text-gray-800 p-1 w-3/4"
+              autoFocus
+              onBlur={() => setIsEditing(false)}
+            />
+          ) : (
+            <>
+              <span>{showcaseName}</span>
+              <button
+                className="ml-2 hover:text-yellow-500"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setIsEditing(true);
+                }}
+              >
+                ✏️
+              </button>
+            </>
+          )}
         </div>
       </div>
 

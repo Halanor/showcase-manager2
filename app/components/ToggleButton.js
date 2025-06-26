@@ -14,7 +14,7 @@ const ToggleButton = ({ label, checked, onChange }) => {
         />
         <div
           className={`w-11 h-6 rounded-full peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-gray-500
-            ${checked ? 'bg-green-400' : 'bg-gray-300'}`}
+            ${checked ? 'bg-[#5bbe4a]' : 'bg-gray-300'}`}
         />
         <div
           className={`absolute left-0.5 top-0.5 w-5 h-5 rounded-full border border-gray-300 bg-white 

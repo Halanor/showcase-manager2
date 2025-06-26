@@ -11,6 +11,12 @@ export const showcaseController = {
     if (!name) {
       return new Response('Missing showcase name', { status: 400 });
     }
+
+    const existing = await showcaseService.findByName({ name }); 
+    if (existing) {
+      return new Response(`A showcase named "${name}" already exists`, { status: 409 }); // Conflict
+    }
+
     await showcaseService.add({ name });
     return Response.json({ message: 'Showcase added' });
   },
@@ -29,6 +35,12 @@ export const showcaseController = {
     if (!oldName || !newName) {
       return new Response('Missing old or new name', { status: 400 });
     }
+
+    const existing = await showcaseService.findByName({ name: newName }); 
+    if (existing) {
+      return new Response(`A showcase named "${newName}" already exists`, { status: 409 }); 
+    }
+
     await showcaseService.rename({ oldName, newName });
     return Response.json({ message: `Showcase "${oldName}" renamed to "${newName}"` });
   },
@@ -39,7 +51,7 @@ export const showcaseController = {
       return new Response(`Invalid value for ${field}`, { status: 400 });
     }
     await showcaseService.updateBooleanField({ name, field, value }); 
-    return Response.json({ message: `${field} updated for ${name}` });
+    return Response.json({ message: `${field} updated for ${name}` }); 
   },
 };
 
