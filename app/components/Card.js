@@ -1,6 +1,16 @@
 'use client';
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import ToggleButton from './ToggleButton';
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  ResponsiveContainer,
+  CartesianGrid,
+  LabelList,
+} from 'recharts';
 
 const Card = ({ 
   showcaseName,
@@ -17,9 +27,12 @@ const Card = ({
   isAddCard,
   onAddClick,
   onRename,
+  temps = [],
+  humidityValues = []
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [newName, setNewName] = useState(showcaseName);
+  const router = useRouter();
 
   if (isAddCard) {
     return (
@@ -42,6 +55,23 @@ const Card = ({
     } else if (e.key === 'Escape') {
       setIsEditing(false);
       setNewName(showcaseName);
+    }
+  };
+  
+  // Safely compute max values
+  const validTemps = Array.isArray(temps) && temps.length > 0 ? temps : [];
+  const validHumids = Array.isArray(humidityValues) && humidityValues.length > 0 ? humidityValues : [];
+  const maxTemp = validTemps.length > 0 ? Math.max(...validTemps) : null;
+  const maxHumidity = validHumids.length > 0 ? Math.max(...validHumids) : null;
+
+  const lastMaxTempIndex = maxTemp !== null ? validTemps.lastIndexOf(maxTemp) : -1;
+  const lastMaxHumidityIndex = maxHumidity !== null ? validHumids.lastIndexOf(maxHumidity) : -1;
+
+  const chartData = validTemps.map((t, i) => ({ time: i, temperature: t, humidity: validHumids[i] }));
+
+  const handleChartClick = () => {
+    if (showcaseName) {
+      router.push(`/statistics?showcase=${encodeURIComponent(showcaseName)}`);
     }
   };
   
@@ -108,9 +138,77 @@ const Card = ({
         </div>
       </div>
 
-      {/* CHART PLACEHOLDER */}
-      <div className="h-16 flex items-center justify-center text-gray-500 border-t">
-        <span>Chart goes here</span>
+      {/* CHART */}
+      <div
+        className="h-16 flex items-center justify-center border-t cursor-pointer hover:opacity-80"
+        style={{ marginTop: '8px', marginBottom: '10px', paddingTop: '10px', paddingBottom: '2px' }}
+        onClick={handleChartClick}
+      >
+        {chartData.length > 0 && (
+          <div className="w-48 h-16">
+            <ResponsiveContainer>
+              <LineChart data={chartData}>
+                <CartesianGrid stroke="#9E9E9E" strokeDasharray="3 3" />
+                <XAxis dataKey="time" hide />
+                <YAxis hide />
+                <Line
+                  type="monotone"
+                  dataKey="temperature"
+                  stroke="#C62828"
+                  dot={false}
+                >
+                  {lastMaxTempIndex >= 0 && (
+                    <LabelList
+                      dataKey="temperature"
+                      position="top"
+                      content={(props) => {
+                        const { index, value, x, y } = props;
+                        return index === lastMaxTempIndex ? (
+                          <text
+                            x={x}
+                            y={y}
+                            dy={-4}
+                            fill="#C62828"
+                            fontSize={12}
+                          >
+                            {value}°C
+                          </text>
+                        ) : null;
+                      }}
+                    />
+                  )}
+                </Line>
+                <Line
+                  type="monotone"
+                  dataKey="humidity"
+                  stroke="#1976D2"
+                  dot={false}
+                >
+                  {lastMaxHumidityIndex >= 0 && (
+                    <LabelList
+                      dataKey="humidity"
+                      position="top"
+                      content={(props) => {
+                        const { index, value, x, y } = props;
+                        return index === lastMaxHumidityIndex ? (
+                          <text
+                            x={x}
+                            y={y}
+                            dy={-4}
+                            fill="#1976D2"
+                            fontSize={12}
+                          >
+                            {value}%
+                          </text>
+                        ) : null;
+                      }}
+                    />
+                  )}
+                </Line>
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+        )}
       </div>
     </div>
   );

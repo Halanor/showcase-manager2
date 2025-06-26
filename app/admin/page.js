@@ -132,6 +132,8 @@ export default function AdminPage() {
                 onSpotChange={(e) => handleSpotChange(showcase.name, e.target.checked)}
                 onLightChange={(e) => handleLightChange(showcase.name, e.target.checked)}
                 onRename={(oldName, newName) => handleRename(oldName, newName)}
+                temps={showcase.temps}
+                humidityValues={showcase.humidity}
               />
             );
           })}
