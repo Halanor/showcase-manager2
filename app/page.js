@@ -1,45 +1,59 @@
 'use client';
 
-export default function LandingPage() {
-	return (
-		<div className="min-h-screen flex flex-col text-gray-100">
-			<div className="flex flex-1 flex-col items-center justify-center">
-				<h1 className="text-5xl font-bold text-gray-500">
-					Welcome to Showcase Manager
-				</h1>
-				<h2 className="text-2xl mt-3 text-gray-400">
-					Your showcases, under control
-				</h2>
-			</div>
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
-			<div class="flex justify-center items-center min-h-screen">
-				<div class="max-w-[720px] mx-auto">
-					<div class="relative flex max-w-[24rem] flex-col overflow-hidden rounded-xl bg-white bg-clip-border text-gray-700 shadow-md">
-						<div class="relative m-0 overflow-hidden text-gray-700 bg-transparent rounded-none shadow-none bg-clip-border">
-							<img
-								src="/monochrome.jpg"
-								alt="ui/ux review check"
-							/>
-						</div>
-						<div class="p-6">
-							<h4 class="block font-sans text-2xl antialiased font-semibold leading-snug tracking-normal text-blue-gray-900">
-								Showcase 1
-							</h4>
-							<p class="block mt-3 font-sans text-xl antialiased font-normal leading-relaxed text-gray-700">
-								Because it&apos;s about motivating the doers.
-								Because I&apos;m here to follow my dreams and
-								inspire others.
-							</p>
-						</div>
-						<div class="flex items-center justify-between p-6">
-							<div class="flex items-center -space-x-3"></div>
-							<p class="block font-sans text-base antialiased font-normal leading-relaxed text-inherit">
-								January 10
-							</p>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	);
+
+export default function LandingPage() {
+  const router = useRouter();
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+    // placeholder for authentication logic to fix later
+    console.log({ username, password });
+    // successful login redirect to admin for now, will change later depending on account logged
+    router.push('/admin');
+  };
+  
+  return (
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 text-gray-800 p-4">
+      <h1 className="text-5xl font-bold text-gray-600">Welcome to Showcase Manager</h1>
+      <h2 className="text-2xl mt-3 text-gray-500">Your showcases, under control</h2>
+      <div className="mt-8 bg-white rounded-xl p-6 w-80 shadow-lg">
+        <h3 className="text-2xl font-semibold text-gray-700 text-center">Login</h3>
+        <form onSubmit={handleLogin} className="flex flex-col mt-4 space-y-4">
+          <input
+            type="text"
+            placeholder="Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            className="p-3 rounded border border-gray-300 focus:outline-none focus:border-gray-500"
+            required
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="p-3 rounded border border-gray-300 focus:outline-none focus:border-gray-500"
+            required
+          />
+          <button
+            type="submit"
+            className="bg-gray-600 text-white rounded p-3 mt-2 hover:bg-gray-700"
+          >
+            Log In
+          </button>
+        </form>
+        <div className="text-center mt-3">
+          <Link href="/register" className="text-gray-500 text-sm hover:underline">
+						Create an account
+					</Link>
+        </div>
+      </div>
+    </div>
+  );
 }

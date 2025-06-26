@@ -98,15 +98,8 @@ export default function AdminPage() {
     fetchShowcases();
   }
 
-  const handleErrorKeyDown = (e) => {
-    if (e.key === 'Enter' || e.key === 'Escape') {
-      setShowErrorModal(false);
-      setErrorMessage('');
-    }
-  };
-  
   return (
-    <div className="min-h-screen text-gray-800 pt-8 pb-8 bg-gray-100">
+    <div className="min-h-screen text-gray-800 pt-8 pb-8 bg-gray-100 ml-40">
       <div className="max-w-7xl mx-auto">
         <h3 className="text-3xl font-bold text-center mt-6">Current Showcases</h3>
         <div className="flex flex-wrap justify-center gap-4 mt-4">
@@ -139,79 +132,6 @@ export default function AdminPage() {
           })}
           <Card isAddCard onAddClick={() => setIsModalOpen(true)} />
         </div>
-
-        {/* ADD MODAL */}
-        <div
-          className={`fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50
-            transition-opacity duration-300 ${isModalOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
-        >
-          <div
-            className={`bg-white rounded-lg p-6 w-80 flex flex-col space-y-4
-              transform transition-transform duration-300 ${isModalOpen ? 'scale-100 opacity-100' : 'scale-90 opacity-0'}`}
-          >
-            <h2 className="text-gray-800 text-xl font-bold">Add New Showcase</h2>
-            <input
-              type="text"
-              placeholder="Enter new showcase name"
-              className="border rounded p-2 text-gray-800"
-              value={newName}
-              onChange={(e) => setNewName(e.target.value)}
-            />
-            <div className="flex justify-end space-x-3">
-              <button
-                className="bg-gray-300 text-gray-800 font-bold rounded-full px-4 py-2 hover:brightness-125"
-                onClick={() => setIsModalOpen(false)}
-              >
-                Cancel
-              </button>
-              <button
-                className="bg-cyan-500 text-gray-800 font-bold rounded-full px-4 py-2 hover:brightness-125"
-                onClick={handleAdd}
-              >
-                Add
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* ERROR MODAL */}
-          <div
-            className={`fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50
-              transition-opacity duration-300 ${showErrorModal ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
-            tabIndex={0}
-            ref={(el) => {
-              if (el && showErrorModal) {
-                el.focus();
-              }
-            }}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === 'Escape') {
-                setShowErrorModal(false);
-                setErrorMessage('');
-              }
-            }}
-          >
-            <div
-              className={`bg-white rounded-lg p-6 w-80 flex flex-col space-y-4
-                transform transition-transform duration-300 ${showErrorModal ? 'scale-100 opacity-100' : 'scale-90 opacity-0'}`}
-            >
-              <h2 className="text-red-600 text-xl font-bold">Error</h2>
-              <p className="text-gray-800">{errorMessage}</p>
-              <div className="flex justify-end">
-                <button
-                  className="bg-gray-300 text-gray-800 font-bold rounded-full px-4 py-2 hover:brightness-125"
-                  onClick={() => {
-                    setShowErrorModal(false);
-                    setErrorMessage('');
-                  }}
-                >
-                  Ok
-                </button>
-              </div>
-            </div>
-          </div>
-          {/* END ERROR MODAL */}
-
       </div>
     </div>
   );

@@ -1,23 +1,20 @@
-import './globals.css';
+'use client';
+import { usePathname } from 'next/navigation';
 import Navbar from './components/Navbar';
-
-export const metadata = {
-  title: 'Showcase Manager',
-  description: 'Manage showcases for museums',
-};
+import './globals.css';
 
 export default function RootLayout({ children }) {
+  const pathname = usePathname();
+
+  const isLandingPage = pathname === '/';
+
   return (
     <html lang="en">
-  <head></head>
-  <body className="min-h-screen flex">
-    <Navbar />
-    <main className="ml-40 flex-1 p-4">
-      {children}
-    </main>
-  </body>
-</html>
-
+      <body className="bg-gray-100 pr-400">
+        {!isLandingPage && <Navbar />}
+        {children}
+      </body>
+    </html>
   );
 }
 

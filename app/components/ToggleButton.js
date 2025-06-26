@@ -13,7 +13,7 @@ const ToggleButton = ({ label, checked, onChange }) => {
           onChange={onChange}
         />
         <div
-          className={`w-11 h-6 rounded-full peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-gray-500
+          className={`w-11 h-6 rounded-full peer-focus:outline-none peer-focus:ring-gray-500
             ${checked ? 'bg-[#5bbe4a]' : 'bg-gray-300'}`}
         />
         <div

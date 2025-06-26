@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import ToggleButton from './ToggleButton';
+import AddCardButton from './AddCardButton';
 import {
   LineChart,
   Line,
@@ -35,16 +36,9 @@ const Card = ({
   const router = useRouter();
 
   if (isAddCard) {
-    return (
-      <div
-        className="flex flex-col items-center justify-center rounded-2xl border-2 border-gray-300 bg-gray-100 p-4 cursor-pointer hover:border-gray-400"
-        style={{ width: '250px', height: '300px' }}
-        onClick={onAddClick}
-      >
-        <div className="text-gray-500 text-6xl font-thin">+</div>
-      </div>
-    );
+    return <AddCardButton onClick={onAddClick} />;
   }
+
 
   const handleRename = async (e) => {
     if (e.key === 'Enter') {
@@ -58,7 +52,7 @@ const Card = ({
     }
   };
   
-  // Safely compute max values
+  // compute max values
   const validTemps = Array.isArray(temps) && temps.length > 0 ? temps : [];
   const validHumids = Array.isArray(humidityValues) && humidityValues.length > 0 ? humidityValues : [];
   const maxTemp = validTemps.length > 0 ? Math.max(...validTemps) : null;
@@ -77,7 +71,7 @@ const Card = ({
   
   return (
     <div className="rounded-xl border border-gray-300 overflow-hidden bg-white text-gray-800 shadow hover:shadow-lg flex flex-col" style={{ width: '250px' }}>
-      {/* IMAGE ON TOP */}
+      {/* image field */}
       <div className="relative h-40 w-full overflow-hidden flex justify-center items-center">
         <img
           src="/monochrome.jpg"
@@ -112,7 +106,7 @@ const Card = ({
         </div>
       </div>
 
-      {/* INFO + TOGGLES */}
+      {/* info + toggles */}
       <div className="p-4 flex justify-between items-start space-x-4">
         <div className="flex flex-col space-y-1 pt-4">
           <span className="text-3xl pl-4">{temperature}°C</span>
@@ -138,7 +132,7 @@ const Card = ({
         </div>
       </div>
 
-      {/* CHART */}
+      {/* chart gield */}
       <div
         className="h-16 flex items-center justify-center border-t cursor-pointer hover:opacity-80"
         style={{ marginTop: '8px', marginBottom: '10px', paddingTop: '10px', paddingBottom: '2px' }}

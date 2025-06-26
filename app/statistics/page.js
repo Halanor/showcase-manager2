@@ -79,7 +79,7 @@ export default function StatisticsPage() {
   };
   
   return (
-    <div className="min-h-screen text-gray-800 pt-8 pb-8 bg-gray-100 flex flex-col items-center space-y-8">
+    <div className="min-h-screen text-gray-800 pt-8 pb-8 bg-gray-100 flex flex-col items-center space-y-8 ml-40">
       <div className="bg-gray-200 rounded p-4 flex flex-col items-center space-y-3 w-64">
         <h3 className="font-bold">Select Showcase</h3>
         <select
@@ -125,7 +125,11 @@ export default function StatisticsPage() {
       </div>
 
       <div className="bg-gray-200 rounded-xl p-4 w-full max-w-3xl">
-        <Graph data={data} showTemp={showTemp} showHumidity={showHumidity} />
+        <Graph
+          data={selectedShowcase ? data : Array.from({ length: 24 }, (_, i) => ({ time: `${i}:00` }))} // Dummy data when no showcase selected
+          showTemp={showTemp}
+          showHumidity={showHumidity}
+        />
         <div className="text-center mt-2">{renderLegend()}</div>
       </div>
     </div>
