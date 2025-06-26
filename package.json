@@ -13,6 +13,7 @@
     "@emotion/styled": "^11.14.0",
     "@mui/material": "^7.1.2",
     "autoprefixer": "^10.4.21",
+    "bcrypt": "^6.0.0",
     "chart.js": "^4.5.0",
     "mongodb": "^6.17.0",
     "next": "15.3.4",
