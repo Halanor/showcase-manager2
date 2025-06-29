@@ -4,7 +4,7 @@ class ShowcaseDAO {
   constructor() {
     this.client = null;
     this.collection = null;
-    this.uri = 'mongodb://localhost:27017';
+    this.uri = process.env.MONGODB_URI; // ✅ Now using the .env.local
   }
 
   async connect() {
@@ -38,7 +38,7 @@ class ShowcaseDAO {
 
   async findByName(name) {
     const collection = await this.connect();
-    return collection.findOne({ name }); // Returns the showcase if found
+    return collection.findOne({ name }); 
   }
 
   async updateField({ name, field, value }) {

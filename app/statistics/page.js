@@ -1,6 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import Graph from '../components/Graph';
 
 export default function StatisticsPage() {
@@ -10,6 +10,21 @@ export default function StatisticsPage() {
   const [showHumidity, setShowHumidity] = useState(true);
   const [data, setData] = useState([]);
   const searchParams = useSearchParams();
+  const router = useRouter();
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem('user');
+    if (!storedUser) {
+      alert("You don't have access to this page.");
+      router.push('/');
+      return;
+    }
+    const user = JSON.parse(storedUser);
+    if (!user.role || !['admin', 'manager', 'maintenance'].includes(user.role)) {
+      alert("You don't have access to statistics.");
+      router.push('/');
+    }
+  }, [router]);
 
   useEffect(() => {
     async function fetchShowcases() {
@@ -33,27 +48,18 @@ export default function StatisticsPage() {
         setData([]);
         return;
       }
-
       const showcase = showcases.find((s) => s.name === selectedShowcase);
       if (!showcase) {
         setData([]);
         return;
       }
-
-      const temperatures = Array.isArray(showcase.temps) 
-        ? showcase.temps.slice().reverse() 
-        : [];
-      const humidityValues = Array.isArray(showcase.humidity) 
-        ? showcase.humidity.slice().reverse() 
-        : [];
-
-      const formattedData = temperatures.map((temp, index) => {
-        return {
-          time: `${index}:00`,
-          temperature: temp,
-          humidity: humidityValues[index] ?? null,
-        };
-      });
+      const temperatures = Array.isArray(showcase.temps) ? showcase.temps.slice().reverse() : [];
+      const humidityValues = Array.isArray(showcase.humidity) ? showcase.humidity.slice().reverse() : [];
+      const formattedData = temperatures.map((temp, index) => ({
+        time: `${index}:00`,
+        temperature: temp,
+        humidity: humidityValues[index] ?? null,
+      }));
       setData(formattedData);
     }
     fetchData();
@@ -77,7 +83,7 @@ export default function StatisticsPage() {
       </div>
     );
   };
-  
+
   return (
     <div className="min-h-screen text-gray-800 pt-8 pb-8 bg-gray-100 flex flex-col items-center space-y-8 ml-40">
       <div className="bg-gray-200 rounded p-4 flex flex-col items-center space-y-3 w-64">
@@ -99,11 +105,12 @@ export default function StatisticsPage() {
             onClick={() => setShowTemp((prev) => !prev)}
             disabled={!selectedShowcase}
             title={!selectedShowcase ? 'Select a showcase' : ''}
-            className={`w-24 rounded-full px-3 py-1 font-bold ${!selectedShowcase
-              ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-              : showTemp
-              ? 'bg-[#C62828] text-white'
-              : 'bg-gray-300 text-gray-800'
+            className={`w-24 rounded-full px-3 py-1 font-bold ${
+              !selectedShowcase
+                ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                : showTemp
+                ? 'bg-[#C62828] text-white'
+                : 'bg-gray-300 text-gray-800'
             }`}
           >
             Temp
@@ -112,11 +119,12 @@ export default function StatisticsPage() {
             onClick={() => setShowHumidity((prev) => !prev)}
             disabled={!selectedShowcase}
             title={!selectedShowcase ? 'Select a showcase' : ''}
-            className={`w-24 rounded-full px-3 py-1 font-bold ${!selectedShowcase
-              ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-              : showHumidity
-              ? 'bg-[#1976D2] text-white'
-              : 'bg-gray-300 text-gray-800'
+            className={`w-24 rounded-full px-3 py-1 font-bold ${
+              !selectedShowcase
+                ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                : showHumidity
+                ? 'bg-[#1976D2] text-white'
+                : 'bg-gray-300 text-gray-800'
             }`}
           >
             Humidity
@@ -126,7 +134,11 @@ export default function StatisticsPage() {
 
       <div className="bg-gray-200 rounded-xl p-4 w-full max-w-3xl">
         <Graph
-          data={selectedShowcase ? data : Array.from({ length: 24 }, (_, i) => ({ time: `${i}:00` }))} // Dummy data when no showcase selected
+          data={
+            selectedShowcase
+              ? data
+              : Array.from({ length: 24 }, (_, i) => ({ time: `${i}:00` }))
+          }
           showTemp={showTemp}
           showHumidity={showHumidity}
         />

@@ -4,20 +4,31 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
-
 export default function LandingPage() {
   const router = useRouter();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    // placeholder for authentication logic to fix later
-    console.log({ username, password });
-    // successful login redirect to admin for now, will change later depending on account logged
-    router.push('/admin');
+    const res = await fetch("/api/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username, password })
+    });
+
+    const result = await res.json();
+
+    if (res.ok) {
+      // save user info/role for later
+      localStorage.setItem("user", JSON.stringify(result.user));
+
+      router.push("/dashboard"); 
+    } else {
+      alert(result.error || "Invalid username or password");
+    }
   };
-  
+
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 text-gray-800 p-4">
       <h1 className="text-5xl font-bold text-gray-600">Welcome to Showcase Manager</h1>
@@ -50,8 +61,8 @@ export default function LandingPage() {
         </form>
         <div className="text-center mt-3">
           <Link href="/register" className="text-gray-500 text-sm hover:underline">
-						Create an account
-					</Link>
+            Create an account
+          </Link>
         </div>
       </div>
     </div>

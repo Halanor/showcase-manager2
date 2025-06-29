@@ -1,7 +1,26 @@
-import showcases from '../../../../showcases.json';
-import fs from 'fs';
-import path from 'path';
+import { MongoClient } from 'mongodb';
 import bcrypt from 'bcrypt';
+
+const uri = process.env.MONGODB_URI;
+const client = new MongoClient(uri);
+
+export async function GET() {
+  try {
+    await client.connect();
+    const db = client.db('admin');
+    const usersCollection = db.collection('users');
+    const users = await usersCollection
+      .find({}, { projection: { password: 0 } }) // NEVER expose password hashes
+      .toArray();
+
+    return new Response(JSON.stringify(users), { status: 200 });
+  } catch (error) {
+    console.error(error);
+    return new Response(JSON.stringify({ error: 'Server error' }), { status: 500 });
+  } finally {
+    await client.close();
+  }
+}
 
 export async function POST(request) {
   const {
@@ -11,10 +30,9 @@ export async function POST(request) {
     email,
     address,
     phone1,
-    phone2,
+    phone2
   } = await request.json();
 
-  // field validations
   if (!username || !password || !dateOfBirth || !email || !address || !phone1) {
     return new Response(
       JSON.stringify({ error: 'Missing required fields' }),
@@ -22,16 +40,6 @@ export async function POST(request) {
     );
   }
 
-  // email validation
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(email)) {
-    return new Response(
-      JSON.stringify({ error: 'Invalid email address' }),
-      { status: 400 }
-    );
-  }
-
-  // address validation
   const { street, number, postalCode, city } = address;
   if (!street || !number || !postalCode || !city) {
     return new Response(
@@ -40,42 +48,87 @@ export async function POST(request) {
     );
   }
 
-  // admin.showcases.users is an array check
-  if (!Array.isArray(showcases.admin.showcases.users)) {
-    showcases.admin.showcases.users = [];
-  }
+  try {
+    await client.connect();
+    const db = client.db('admin');
+    const usersCollection = db.collection('users');
 
-  // check if user already exists
-  const userExists = showcases.admin.showcases.users.some((user) => user.username === username);
-  if (userExists) {
+    const existingUser = await usersCollection.findOne({ username });
+    if (existingUser) {
+      return new Response(
+        JSON.stringify({ error: 'Username already taken' }),
+        { status: 409 }
+      );
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const newUser = {
+      username,
+      password: hashedPassword,
+      role: 'maintenance', // default role
+      dateOfBirth,
+      email,
+      address,
+      phone1,
+      phone2
+    };
+
+    await usersCollection.insertOne(newUser);
+
     return new Response(
-      JSON.stringify({ error: 'Username already taken.' }),
-      { status: 409 }
+      JSON.stringify({ message: 'User registered successfully' }),
+      { status: 201 }
+    );
+  } catch (error) {
+    console.error(error);
+    return new Response(
+      JSON.stringify({ error: 'Internal server error' }),
+      { status: 500 }
+    );
+  } finally {
+    await client.close();
+  }
+}
+
+export async function PATCH(request) {
+  const { username, role } = await request.json();
+
+  if (!username || !role) {
+    return new Response(
+      JSON.stringify({ error: 'Missing username or role' }),
+      { status: 400 }
     );
   }
 
-  // password hadd
-  const hashedPassword = await bcrypt.hash(password, 10);
+  try {
+    await client.connect();
+    const db = client.db('admin');
+    const usersCollection = db.collection('users');
 
-  // push new user to db
-  showcases.admin.showcases.users.push({
-    username,
-    password: hashedPassword,
-    dateOfBirth,
-    email,
-    address,
-    phone1,
-    phone2,
-  });
+    const res = await usersCollection.updateOne(
+      { username },
+      { $set: { role } }
+    );
 
-  // save showcases.json
-  const showcasesFile = path.join(process.cwd(), 'showcases.json');
-  fs.writeFileSync(showcasesFile, JSON.stringify(showcases, null, 2));
+    if (res.modifiedCount === 0) {
+      return new Response(
+        JSON.stringify({ error: 'User not found or role unchanged' }),
+        { status: 404 }
+      );
+    }
 
-  return new Response(
-    JSON.stringify({ message: 'User registered successfully' }),
-    { status: 201 }
-  );
+    return new Response(
+      JSON.stringify({ message: 'Role updated successfully' }),
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error(error);
+    return new Response(
+      JSON.stringify({ error: 'Internal server error' }),
+      { status: 500 }
+    );
+  } finally {
+    await client.close();
+  }
 }
-
-
