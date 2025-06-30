@@ -6,7 +6,7 @@ export default function RegisterPage() {
   const router = useRouter();
   const [user, setUser] = useState({
     name: '', 
-    lastName: '', 
+    lastname: '', 
     dateOfBirth: '', 
     email: '', 
     address: {
@@ -90,7 +90,7 @@ export default function RegisterPage() {
       <form onSubmit={handleRegister} className="bg-white rounded p-6 mt-4 space-y-3 w-[600px] shadow">
         <div className="grid grid-cols-2 gap-3">
           <input required name="name" placeholder="First Name" value={user.name} onChange={handleChange} className="p-2 rounded border" />
-          <input required name="lastName" placeholder="Last Name" value={user.lastName} onChange={handleChange} className="p-2 rounded border" />
+          <input required name="lastname" placeholder="Last Name" value={user.lastname} onChange={handleChange} className="p-2 rounded border" />
           
           <input required name="dateOfBirth" placeholder="Date of Birth" value={user.dateOfBirth} onChange={handleChange} className="p-2 rounded border" />
           <input required name="email" placeholder="Email" value={user.email} onChange={handleChange} className="p-2 rounded border" />

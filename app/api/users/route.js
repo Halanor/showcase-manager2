@@ -4,13 +4,31 @@ import bcrypt from 'bcrypt';
 const uri = process.env.MONGODB_URI;
 const client = new MongoClient(uri);
 
-export async function GET() {
+// get
+export async function GET(request) {
   try {
     await client.connect();
     const db = client.db('admin');
     const usersCollection = db.collection('users');
+
+    const { searchParams } = new URL(request.url);
+    const username = searchParams.get('username');
+
+    if (username) {
+      // Fetch single user by username
+      const user = await usersCollection.findOne(
+        { username },
+        { projection: { password: 0 } }
+      );
+      if (!user) {
+        return new Response(JSON.stringify({ error: 'User not found' }), { status: 404 });
+      }
+      return new Response(JSON.stringify(user), { status: 200 });
+    }
+
+    // fetch users
     const users = await usersCollection
-      .find({}, { projection: { password: 0 } }) // NEVER expose password hashes
+      .find({}, { projection: { password: 0 } })
       .toArray();
 
     return new Response(JSON.stringify(users), { status: 200 });
@@ -22,10 +40,13 @@ export async function GET() {
   }
 }
 
+// post new users
 export async function POST(request) {
   const {
     username,
     password,
+    name,
+    lastname,
     dateOfBirth,
     email,
     address,
@@ -33,7 +54,7 @@ export async function POST(request) {
     phone2
   } = await request.json();
 
-  if (!username || !password || !dateOfBirth || !email || !address || !phone1) {
+  if (!username || !password || !name || !lastname || !dateOfBirth || !email || !address || !phone1) {
     return new Response(
       JSON.stringify({ error: 'Missing required fields' }),
       { status: 400 }
@@ -67,6 +88,8 @@ export async function POST(request) {
       username,
       password: hashedPassword,
       role: 'maintenance', // default role
+      name,
+      lastname,
       dateOfBirth,
       email,
       address,
@@ -91,12 +114,14 @@ export async function POST(request) {
   }
 }
 
+// patch user info update
 export async function PATCH(request) {
-  const { username, role } = await request.json();
+  const body = await request.json();
+  const { username, role, updates } = body;
 
-  if (!username || !role) {
+  if (!username) {
     return new Response(
-      JSON.stringify({ error: 'Missing username or role' }),
+      JSON.stringify({ error: 'Missing username' }),
       { status: 400 }
     );
   }
@@ -106,21 +131,45 @@ export async function PATCH(request) {
     const db = client.db('admin');
     const usersCollection = db.collection('users');
 
-    const res = await usersCollection.updateOne(
-      { username },
-      { $set: { role } }
-    );
-
-    if (res.modifiedCount === 0) {
+    // role update
+    if (role) {
+      const res = await usersCollection.updateOne(
+        { username },
+        { $set: { role } }
+      );
+      if (res.modifiedCount === 0) {
+        return new Response(
+          JSON.stringify({ error: 'User not found or role unchanged' }),
+          { status: 404 }
+        );
+      }
       return new Response(
-        JSON.stringify({ error: 'User not found or role unchanged' }),
-        { status: 404 }
+        JSON.stringify({ message: 'Role updated successfully' }),
+        { status: 200 }
+      );
+    }
+
+    // user info fields update
+    if (updates) {
+      const res = await usersCollection.updateOne(
+        { username },
+        { $set: updates }
+      );
+      if (res.modifiedCount === 0) {
+        return new Response(
+          JSON.stringify({ error: 'User not found or data unchanged' }),
+          { status: 404 }
+        );
+      }
+      return new Response(
+        JSON.stringify({ message: 'User updated successfully' }),
+        { status: 200 }
       );
     }
 
     return new Response(
-      JSON.stringify({ message: 'Role updated successfully' }),
-      { status: 200 }
+      JSON.stringify({ error: 'Nothing to update' }),
+      { status: 400 }
     );
   } catch (error) {
     console.error(error);

@@ -69,13 +69,13 @@ export default function Navbar() {
             </button>
           )}
 
-          {/* <button
+          <button
             onClick={() => router.push('/settings')}
             className={`flex flex-row items-center space-x-3 p-3 rounded hover:text-yellow-600 ${isActive('/settings') ? 'bg-gray-500' : ''}`}
           >
             <img src="/settings.svg" alt="Settings" className="w-5 h-5" />
             <span className="text-sm">Settings</span>
-          </button> */}
+          </button>
 
           <button
             onClick={() => setShowLogoutModal(true)}
