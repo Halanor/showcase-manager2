@@ -1,19 +1,18 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import UserForm from '../components/UserForm';
 
 export default function SettingsPage() {
   const [userData, setUserData] = useState(null);
-  const [form, setForm] = useState({});
-  const [editableFields, setEditableFields] = useState({});
+  const [error, setError] = useState('');
+  const [message, setMessage] = useState('');
+  const [showModal, setShowModal] = useState(false);
   const [passwords, setPasswords] = useState({
     currentPassword: '',
     newPassword: '',
     confirmNewPassword: '',
   });
-  const [message, setMessage] = useState('');
-  const [error, setError] = useState('');
-  const [showModal, setShowModal] = useState(false);
 
   const router = useRouter();
 
@@ -30,19 +29,6 @@ export default function SettingsPage() {
       .then((res) => res.json())
       .then((data) => {
         setUserData(data);
-        setForm({
-          name: data.name || '',
-          lastname: data.lastname || '',
-          dateOfBirth: data.dateOfBirth || '',
-          email: data.email || '',
-          phone1: data.phone1 || '',
-          phone2: data.phone2 || '',
-          street: data.address?.street || '',
-          number: data.address?.number || '',
-          postalCode: data.address?.postalCode || '',
-          city: data.address?.city || '',
-          address2: data.address?.address2 || '',
-        });
       })
       .catch(() => {
         alert('Error loading user data.');
@@ -50,58 +36,13 @@ export default function SettingsPage() {
       });
   }, [router]);
 
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
-
   const handlePasswordChange = (e) => {
     setPasswords({ ...passwords, [e.target.name]: e.target.value });
   };
 
-  const toggleEditable = (field) => {
-    setEditableFields((prev) => ({
-      ...prev,
-      [field]: !prev[field],
-    }));
-  };
-
-  const savePersonalInfo = async () => {
-    setMessage('');
-    setError('');
-    const res = await fetch('/api/users', {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        username: userData.username,
-        updates: {
-          name: form.name,
-          lastname: form.lastname,
-          dateOfBirth: form.dateOfBirth,
-          email: form.email,
-          phone1: form.phone1,
-          phone2: form.phone2,
-          address: {
-            street: form.street,
-            number: form.number,
-            postalCode: form.postalCode,
-            city: form.city,
-            address2: form.address2,
-          },
-        },
-      }),
-    });
-
-    if (res.ok) {
-      setMessage('Personal information updated successfully.');
-      setShowModal(true);
-    } else {
-      setError('Failed to update personal information.');
-    }
-  };
-
   const savePassword = async () => {
-    setMessage('');
     setError('');
+    setMessage('');
 
     if (passwords.newPassword !== passwords.confirmNewPassword) {
       setError('New passwords do not match.');
@@ -145,46 +86,39 @@ export default function SettingsPage() {
           {error}
         </div>
       )}
+      {message && (
+        <div className="bg-green-100 border border-green-300 text-green-800 p-3 rounded">
+          {message}
+        </div>
+      )}
 
       {/* personal info section */}
       <section className="bg-white p-6 rounded shadow space-y-4">
-        <h2 className="text-xl font-semibold">Update Personal Information</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {Object.entries(form).map(([key, value]) => (
-            <div key={key} className="flex flex-col space-y-1 relative">
-              <label className="text-sm font-semibold capitalize">{key}</label>
-              <input
-                name={key}
-                value={value}
-                onChange={handleChange}
-                disabled={!editableFields[key]}
-                className={`border rounded p-2 ${
-                  editableFields[key]
-                    ? ''
-                    : 'bg-gray-100 text-gray-500 cursor-not-allowed'
-                }`}
-              />
-              <img
-                src="/edit.svg"
-                alt="Edit"
-                className="absolute right-2 top-8 w-4 h-4 cursor-pointer opacity-70 hover:opacity-100"
-                onClick={() => toggleEditable(key)}
-              />
-            </div>
-          ))}
-        </div>
-        <button
-          onClick={savePersonalInfo}
-          className="mt-4 bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700"
-        >
-          Save
-        </button>
+        <h2 className="text-xl font-semibold mb-2">Update Personal Information</h2>
+        <UserForm
+          mode="edit"
+          initialData={{
+            name: userData.name || '',
+            lastname: userData.lastname || '',
+            dateOfBirth: userData.dateOfBirth || '',
+            email: userData.email || '',
+            address: {
+              street: userData.address?.street || '',
+              number: userData.address?.number || '',
+              postalCode: userData.address?.postalCode || '',
+              city: userData.address?.city || '',
+            },
+            phone1: userData.phone1 || '',
+            phone2: userData.phone2 || '',
+            username: userData.username,
+          }}
+          onSuccess={() => setShowModal(true)}
+        />
       </section>
 
       {/* password & security section */}
       <section className="bg-white p-6 rounded shadow space-y-4">
         <h2 className="text-xl font-semibold">Password & Security</h2>
-
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label className="text-sm font-semibold">Current Password</label>
@@ -197,8 +131,7 @@ export default function SettingsPage() {
             />
           </div>
         </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-4">
           <div>
             <label className="text-sm font-semibold">New Password</label>
             <input
@@ -220,7 +153,6 @@ export default function SettingsPage() {
             />
           </div>
         </div>
-
         <button
           onClick={savePassword}
           className="mt-4 bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700"
@@ -229,12 +161,12 @@ export default function SettingsPage() {
         </button>
       </section>
 
-      {/* pop-up*/}
+      {/* succes pop-up */}
       {showModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
           <div className="bg-white rounded-lg p-6 w-80 flex flex-col space-y-4">
             <h2 className="text-gray-800 text-xl font-bold">Success</h2>
-            <p>{message}</p>
+            <p>Your information has been saved.</p>
             <button
               className="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700"
               onClick={() => setShowModal(false)}
