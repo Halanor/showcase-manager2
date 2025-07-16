@@ -1,0 +1,395 @@
+[{
+  "_id": {
+    "$oid": "68569cdbc9af8dd4bda803c0"
+  },
+  "username": "admin",
+  "password": "12345",
+  "name": "Bob",
+  "surname": "Dylan",
+  "email": "admin1@aueb.gr",
+  "address": {
+    "area": "area1",
+    "road": "road1"
+  },
+  "phone": [
+    {
+      "type": "home",
+      "number": "2101111111"
+    },
+    {
+      "type": "mobile",
+      "number": "6931111111"
+    }
+  ],
+  "roles": [
+    "EDITOR",
+    "READER",
+    "ADMIN"
+  ],
+  "products": [
+    {
+      "product": "product 1",
+      "quantity": 2,
+      "cost": 10,
+      "date": {
+        "$date": "2022-12-01T00:00:00.000Z"
+      }
+    },
+    {
+      "product": "product 1",
+      "quantity": 3,
+      "cost": 10,
+      "date": "5/12/2022"
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "68569cdbc9af8dd4bda803c1"
+  },
+  "username": "user1",
+  "password": "12345",
+  "name": "Elvis",
+  "surname": "Presley",
+  "email": "user1@aueb.gr",
+  "address": {
+    "area": "area2",
+    "road": "road2"
+  },
+  "phone": [
+    {
+      "type": "home",
+      "number": "2102222222"
+    },
+    {
+      "type": "mobile",
+      "number": "6932222222"
+    }
+  ],
+  "roles": [
+    "READER"
+  ],
+  "products": [
+    {
+      "product": "product 1",
+      "quantity": 2,
+      "cost": 10,
+      "date": "1/12/2022"
+    },
+    {
+      "product": "product 2",
+      "quantity": 3,
+      "cost": 20,
+      "date": "5/12/2022"
+    },
+    {
+      "product": "product 4",
+      "quantity": 10,
+      "cost": 40,
+      "date": "10/12/2022"
+    }
+  ],
+  "role": "maintenance"
+},
+{
+  "_id": {
+    "$oid": "68569cdbc9af8dd4bda803c2"
+  },
+  "username": "user2",
+  "password": "12345",
+  "name": "Johnny",
+  "surname": "Rivers",
+  "email": "user2@aueb.gr",
+  "address": {
+    "area": "area1",
+    "road": "road3"
+  },
+  "phone": [
+    {
+      "type": "home",
+      "number": "2103333333"
+    },
+    {
+      "type": "mobile",
+      "number": "6933333333"
+    }
+  ],
+  "roles": [
+    "READER"
+  ],
+  "products": [
+    {
+      "product": "product 2",
+      "quantity": 10,
+      "cost": 20,
+      "date": "10/12/2022"
+    },
+    {
+      "product": "product 2",
+      "quantity": 3,
+      "cost": 20,
+      "date": "15/12/2022"
+    },
+    {
+      "product": "product 5",
+      "quantity": 20,
+      "cost": 50,
+      "date": "10/12/2022"
+    }
+  ],
+  "role": "manager"
+},
+{
+  "_id": {
+    "$oid": "68569cdbc9af8dd4bda803c3"
+  },
+  "username": "user3",
+  "password": "12345",
+  "name": "Frank",
+  "surname": "Zappa",
+  "email": "user3@aueb.gr",
+  "address": {
+    "area": "area3",
+    "road": "road4"
+  },
+  "phone": [
+    {
+      "type": "home",
+      "number": "2104444444"
+    },
+    {
+      "type": "mobile",
+      "number": "6934444444"
+    }
+  ],
+  "roles": [
+    "EDITOR",
+    "READER"
+  ],
+  "products": [
+    {
+      "product": "product 1",
+      "quantity": 10,
+      "cost": 10,
+      "date": "12/12/2022"
+    },
+    {
+      "product": "product 3",
+      "quantity": 3,
+      "cost": 30,
+      "date": "12/12/2022"
+    },
+    {
+      "product": "product 4",
+      "quantity": 4,
+      "cost": 40,
+      "date": "12/12/2022"
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "68569cdbc9af8dd4bda803c4"
+  },
+  "username": "user4",
+  "password": "12345",
+  "name": "David",
+  "surname": "Bowie",
+  "email": "user4@aueb.gr",
+  "address": {
+    "area": "area2",
+    "road": "road1"
+  },
+  "phone": [
+    {
+      "type": "home",
+      "number": "2105555555"
+    },
+    {
+      "type": "mobile",
+      "number": "6935555555"
+    }
+  ],
+  "roles": [
+    "EDITOR",
+    "READER"
+  ],
+  "products": [
+    {
+      "product": "product 3",
+      "quantity": 10,
+      "cost": 30,
+      "date": "20/12/2022"
+    },
+    {
+      "product": "product 4",
+      "quantity": 3,
+      "cost": 40,
+      "date": "21/12/2022"
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "68569cdbc9af8dd4bda803c5"
+  },
+  "username": "user5",
+  "password": "12345",
+  "name": "Paul",
+  "surname": "McCartney",
+  "email": "user5@aueb.gr",
+  "address": {
+    "area": "area1",
+    "road": "road1"
+  },
+  "phone": [
+    {
+      "type": "home",
+      "number": "2106666666"
+    },
+    {
+      "type": "mobile",
+      "number": "6936666666"
+    }
+  ],
+  "roles": [
+    "EDITOR",
+    "READER"
+  ],
+  "products": [
+    {
+      "product": "product 3",
+      "quantity": 10,
+      "cost": 30,
+      "date": "20/12/2022"
+    },
+    {
+      "product": "product 4",
+      "quantity": 3,
+      "cost": 40,
+      "date": "21/12/2022"
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "685d8a88058d2ebe31bdc744"
+  },
+  "name": "Χριστόφορος",
+  "lastName": "Καλλίμαχος",
+  "username": "test1",
+  "password": "$2b$10$BTvxQCI8o6HnS/kPKgylLuv5atXPYLORpkwYqN8dvu7BmTGd9lvri",
+  "dateOfBirth": "15/05/1992",
+  "email": "lemoustik015@hotmail.com",
+  "address": {
+    "street": "Σουλίου",
+    "number": "20",
+    "postalCode": "15343",
+    "city": "Αθήνα, Αγία Παρασκευή",
+    "address2": "Σουλίου 20"
+  },
+  "phone1": "6986673886",
+  "phone2": "",
+  "role": ""
+},
+{
+  "_id": {
+    "$oid": "685dc71c5324031ed1b1ae2c"
+  },
+  "username": "Admin",
+  "password": "$2b$10$o.TYivtAoJ321v7Mvnl5UukZCvrzC/Vxvjiy08p3nvhOORKV3e7H6",
+  "dateOfBirth": "15/05/1992",
+  "email": "ckallimachos@gmail.com",
+  "address": {
+    "street": "Σουλίου",
+    "number": "20",
+    "postalCode": "15343",
+    "city": "Αθήνα, Αγία Παρασκευή",
+    "address2": "Σουλίου 20"
+  },
+  "phone1": "6986673886",
+  "phone2": "",
+  "role": "admin",
+  "name": "Christopher",
+  "lastname": "Kallimachos"
+},
+{
+  "_id": {
+    "$oid": "686106c2ead6ae84b08de1d3"
+  },
+  "username": "mika",
+  "password": "$2b$10$iBspyn8jWuC87U3zFIINgOzusqJ0BZG1JGb/eboKn5lyUb3qZCgti",
+  "dateOfBirth": "18/10/94",
+  "email": "mikajo92@gmail.com",
+  "address": {
+    "street": "Souliou",
+    "number": "20",
+    "postalCode": "15343",
+    "city": "Αθήνα, Αγία Παρασκευή",
+    "address2": "Σουλίου 20"
+  },
+  "phone1": "6986673886",
+  "phone2": "",
+  "role": "maintenance"
+},
+{
+  "_id": {
+    "$oid": "686136aa69131cb02ce831d0"
+  },
+  "username": "Vess",
+  "password": "$2b$10$DmIBqW0j4yk2yPOKO3mJfeB0k2hR0u3deSkW5IVweju56ooIQqfRS",
+  "role": "manager",
+  "dateOfBirth": "15/05/1970asd",
+  "email": "status98@gmail.com",
+  "address": {
+    "street": "Fteris",
+    "number": "10",
+    "postalCode": "15322",
+    "city": "Athens",
+    "address2": ""
+  },
+  "phone1": "6983788392",
+  "phone2": "",
+  "lastname": "Zikidou",
+  "name": "Vesselina"
+},
+{
+  "_id": {
+    "$oid": "68615d8ff601c7186c5eb7d7"
+  },
+  "username": "test",
+  "password": "$2b$10$7N8hb55Gilm59o5mMjvKWeUHW5L1lbChsnD9yPQ39gx0JrbyLy./C",
+  "role": "maintenance",
+  "dateOfBirth": "15/06/1960",
+  "email": "test@gmail.com",
+  "address": {
+    "street": "Souliou",
+    "number": "20",
+    "postalCode": "15343",
+    "city": "Αθήνα, Αγία Παρασκευή",
+    "address2": "Σουλίου 20"
+  },
+  "phone1": "6986673886",
+  "phone2": ""
+},
+{
+  "_id": {
+    "$oid": "68616b1e34f05aecb11885d1"
+  },
+  "username": "test3",
+  "password": "$2b$10$kKgZnW6ozdtMf5Bu1gSQ3.5IZKSZOxy1UEVQV.mMz76/Cij6tQj1e",
+  "role": "maintenance",
+  "name": "test3",
+  "lastname": "test35",
+  "dateOfBirth": "18/10/94",
+  "email": "lemoustik015@hotmail.com",
+  "address": {
+    "street": "Σουλίου",
+    "number": "20",
+    "postalCode": "15343",
+    "city": "Αθήνα, Αγία Παρασκευή",
+    "address2": "Σουλίου 20"
+  },
+  "phone1": "6986673886",
+  "phone2": ""
+}]
