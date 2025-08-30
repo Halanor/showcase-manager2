@@ -17,6 +17,10 @@
 /.next/
 /out/
 
+# MongoDB data
+mongo-data/
+mongo-init/*.js~
+
 # production
 /build
 

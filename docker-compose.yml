@@ -1,0 +1,26 @@
+version: "3.8"
+services:
+  mongo:
+    image: mongo:7
+    restart: always
+    container_name: showcase-mongo
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    volumes:
+      - mongo-data:/data/db
+      - C:/Users/Christopher/Documents/Code/showcase-manager/mongo-init:/docker-entrypoint-initdb.d:ro
+  app:
+    build: .
+    container_name: showcase-app
+    ports:
+      - "3000:3000"
+    environment:
+      MONGODB_URI: "mongodb://root:example@mongo:27017/admin"
+    depends_on:
+      - mongo
+
+volumes:
+  mongo-data:
