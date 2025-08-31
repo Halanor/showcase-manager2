@@ -1,36 +1,92 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Showcase Manager
 
-## Getting Started
+A Next.js + MongoDB app, ready to run with Docker.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## 🚀 Quick Start
+
+### **Requirements**
+- [Docker Desktop](https://www.docker.com/products/docker-desktop) installed (Windows, Mac, or Linux)
+
+---
+
+### **1. Clone the Repository**
+
+Open your terminal and run:
+
+```sh
+git clone https://github.com/Halanor/showcase-manager2.git
+cd showcase-manager2
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+### **2. Start the App with Docker**
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+In the project folder, run:
 
-## Learn More
+```sh
+docker compose up --build
+```
 
-To learn more about Next.js, take a look at the following resources:
+- The first run may take a few minutes as Docker downloads images and sets up the database.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### **3. Open the App**
 
-## Deploy on Vercel
+Once Docker says the app is ready, open your browser and go to:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+[http://localhost:3000](http://localhost:3000)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+### **4. Log In**
+
+Use these credentials to log in:
+
+- **Username:** `admin`
+- **Password:** `admin`
+
+---
+
+## 🛑 Stopping the App
+
+To stop everything, press `Ctrl+C` in your terminal, then run:
+
+```sh
+docker compose down
+```
+
+---
+
+## 📝 Notes
+
+- The database is automatically seeded with an admin user on first run.
+- No need to install Node.js, npm, or MongoDB—**Docker handles everything**.
+- If you want to reset the database, run:
+  ```sh
+  docker compose down -v
+  docker compose up --build
+  ```
+
+---
+
+## 📦 Project Structure
+
+- `docker-compose.yml` — Docker setup for app and database
+- `mongo-init/init.js` — Seeds the database with the admin user
+- `README.md` — This file
+
+---
+
+## ❓ Need Help?
+
+- [Open an issue](https://github.com/Halanor/showcase-manager2/issues) on GitHub if you get stuck!
+
+---
+
+## 📄 License
+
+MIT
