@@ -11,7 +11,7 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: example
     volumes:
       - mongo-data:/data/db
-      - C:/Users/Christopher/Documents/Code/showcase-manager/mongo-init:/docker-entrypoint-initdb.d:ro
+      - ./mongo-init:/docker-entrypoint-initdb.d:ro
   app:
     build: .
     container_name: showcase-app
