@@ -117,7 +117,7 @@ export async function POST(request) {
 // patch user info update
 export async function PATCH(request) {
   const body = await request.json();
-  const { username, role, updates } = body;
+  const { username, role, updates, currentPassword, newPassword } = body;
 
   if (!username) {
     return new Response(
@@ -130,6 +130,39 @@ export async function PATCH(request) {
     await client.connect();
     const db = client.db('admin');
     const usersCollection = db.collection('users');
+
+    // Password change
+    if (currentPassword && newPassword) {
+      const user = await usersCollection.findOne({ username });
+      if (!user) {
+        return new Response(
+          JSON.stringify({ error: 'User not found' }),
+          { status: 404 }
+        );
+      }
+      const isMatch = await bcrypt.compare(currentPassword, user.password);
+      if (!isMatch) {
+        return new Response(
+          JSON.stringify({ error: 'Current password is incorrect' }),
+          { status: 400 }
+        );
+      }
+      const hashedPassword = await bcrypt.hash(newPassword, 10);
+      const res = await usersCollection.updateOne(
+        { username },
+        { $set: { password: hashedPassword } }
+      );
+      if (res.modifiedCount === 0) {
+        return new Response(
+          JSON.stringify({ error: 'Password not updated' }),
+          { status: 500 }
+        );
+      }
+      return new Response(
+        JSON.stringify({ message: 'Password updated successfully' }),
+        { status: 200 }
+      );
+    }
 
     // role update
     if (role) {
