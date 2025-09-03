@@ -20,4 +20,4 @@ mongoimport \
   --file /docker-entrypoint-initdb.d/users.json \
   --jsonArray --drop
 
-echo "Seeding done."
+echo "Seeding done"
