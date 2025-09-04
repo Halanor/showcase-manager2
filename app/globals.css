@@ -34,12 +34,12 @@ body {
 	padding: 0;
 	margin: 0;
 
-	/* Ensure body takes the full screen */
+	/*  body take full screen */
 	min-height: 100vh;
 
 	font-family: Arial, sans-serif;
 
-	/* Main app background gradient */
+	/* main app background gradient */
 	/* background: linear-gradient(135deg, #0d1117 30%, #1c2433 100%); */
 	background: rgb(245, 243, 243);
 	/* color: #993a3a; */

@@ -1,92 +1,70 @@
-# Showcase Manager
+Το Showcase Manager είναι μια διαδικτυακή εφαρμογή σχεδιασμένη για τον έλεγχο και την παρακολούθηση μουσειακών προθηκών. Παρέχει ένα εύχρηστο περιβάλλον όπου οι χρήστες μπορούν να:
 
-A Next.js + MongoDB app, ready to run with Docker.
+Κλειδώνουν/ξεκλειδώνουν προθήκες απομακρυσμένα
 
----
+Ενεργοποιούν/απενεργοποιούν τον φωτισμό
 
-## 🚀 Quick Start
+Παρακολουθούν τις περιβαλλοντικές συνθήκες (θερμοκρασία και υγρασία)
 
-### **Requirements**
-- [Docker Desktop](https://www.docker.com/products/docker-desktop) installed (Windows, Mac, or Linux)
 
----
+Το σύστημα ακολουθεί την αρχιτεκτονική MVC και χρησιμοποιεί React για το frontend, Node.js (Next.js) για το backend και MongoDB για τη βάση δεδομένων. Ένα Raspberry Pi λειτουργεί ως κεντρικός διακομιστής, ενώ τα επιμέρους Raspberry Pico χειρίζονται αισθητήρες και ενεργοποιητές για κάθε προθήκη.
 
-### **1. Clone the Repository**
+Αυτό το στήσιμο επιτρέπει στο προσωπικό του μουσείου να διαχειρίζεται και να παρακολουθεί εύκολα τα εκθέματα
 
-Open your terminal and run:
+-- Σύνδεση --
 
-```sh
+Όταν η εφαρμογή εκκινεί για πρώτη φορά, φορτώνεται με:
+
+Όνομα χρήστη: admin
+
+Κωδικός πρόσβασης: admin
+
+Ο συγκεκριμένος χρήστης έχει πλήρη εξουσιοδότηση για τη διαχείριση προθηκών, χρηστών και ρυθμίσεων συστήματος. Καλό ειναι να αλλαχτεί άμεσα ο κωδικός μετά την πρώτη σύνδεση.
+
+Για λόγους επίδειξης, η εφαρμογή περιλαμβάνει ένα σύνολο από παραδείγματα προθηκών με προφορτωμένες τιμές θερμοκρασίας και υγρασίας. Κανονικά αυτά τα δεδομένα θα έρχονται στην εφαρμογή απο τα Pico που θα έχει η καθε προθήκη ενσωματςμένη. 
+
+Αυτές οι τιμές είναι δοκιμαστικά δεδομένα και προορίζονται για έλεγχο.
+
+Σε πραγματική χρήση, τα δεδομένα αυτά θα τροφοδοτούνται συνεχώς στο σύστημα από τις συσκευές Raspberry Pico που είναι συνδεδεμένες με τις προθήκες.
+
+-- Επίπεδα Εξουσιοδότησης Χρηστών --
+
+Το σύστημα υποστηρίζει πολλαπλούς ρόλους με διαφορετικά δικαιώματα:
+
+Admin: Πλήρης πρόσβαση (διαχείριση προθηκών, έλεγχος κλειδώματος/φωτισμού, προβολή περιβαλλοντικών δεδομένων, δημιουργία ή διαγραφή χρηστών και αλλαγή ρόλων των χρηστων).
+
+Manager: Περιορισμένη πρόσβαση (έλεγχος φωτισμού και κλειδώματος, προβολή περιβαλλοντικών δεδομένων, χωρίς δυνατότητα διαχείρισης χρηστών). Συνήθως για τον διευθυντη/υπεύθυνο του μουσείου.
+
+Maintenance: Πρόσβαση μόνο για ανάγνωση (προβολή προθηκών και περιβαλλοντικών δεδομένων, χωρίς δικαιώματα ξεκλειδώματος, μόνο πρόσβαση στον φωτισμό). 
+
+-- Deployment με Docker --
+
+1. Open your terminal and run:
+
 git clone https://github.com/Halanor/showcase-manager2.git
 cd showcase-manager2
-```
 
----
+2. Start the app with Docker:
 
-### **2. Start the App with Docker**
-
-In the project folder, run:
-
-```sh
 docker compose up --build
-```
 
-- The first run may take a few minutes as Docker downloads images and sets up the database.
-
----
-
-### **3. Open the App**
+3. Open the app:
 
 Once Docker says the app is ready, open your browser and go to:
 
-[http://localhost:3000](http://localhost:3000)
+http://localhost:3000
 
----
 
-### **4. Log In**
+4. Log in:
 
 Use these credentials to log in:
 
-- **Username:** `admin`
-- **Password:** `admin`
+Username: `admin`
+Password: `admin`
 
----
+It is recommended to change the password upon first login. Go on the left options to Settings and update password.
 
-## 🛑 Stopping the App
+5. Stop the app:
 
-To stop everything, press `Ctrl+C` in your terminal, then run:
-
-```sh
 docker compose down
-```
 
----
-
-## 📝 Notes
-
-- The database is automatically seeded with an admin user on first run.
-- No need to install Node.js, npm, or MongoDB—**Docker handles everything**.
-- If you want to reset the database, run:
-  ```sh
-  docker compose down -v
-  docker compose up --build
-  ```
-
----
-
-## 📦 Project Structure
-
-- `docker-compose.yml` — Docker setup for app and database
-- `mongo-init/init.js` — Seeds the database with the admin user
-- `README.md` — This file
-
----
-
-## ❓ Need Help?
-
-- [Open an issue](https://github.com/Halanor/showcase-manager2/issues) on GitHub if you get stuck!
-
----
-
-## 📄 License
-
-MIT

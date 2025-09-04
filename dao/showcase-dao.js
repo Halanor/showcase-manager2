@@ -4,7 +4,7 @@ class ShowcaseDAO {
   constructor() {
     this.client = null;
     this.collection = null;
-    this.uri = process.env.MONGODB_URI; // ✅ Now using the .env.local
+    this.uri = process.env.MONGODB_URI;
   }
 
   async connect() {

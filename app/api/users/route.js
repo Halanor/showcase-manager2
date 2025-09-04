@@ -131,7 +131,7 @@ export async function PATCH(request) {
     const db = client.db('admin');
     const usersCollection = db.collection('users');
 
-    // Password change
+    // ps change
     if (currentPassword && newPassword) {
       const user = await usersCollection.findOne({ username });
       if (!user) {

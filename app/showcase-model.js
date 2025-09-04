@@ -1,8 +1,8 @@
-// You can use this to define the shape of your showcases
+// showcase template
 export const ShowcaseModel = {
-  name: '',           // String
-  lights: [],         // Array
-  temps: [],          // Array
-  humidity: [],       // Array
+  name: '',           // string
+  lights: [],         // array
+  temps: [],          // array
+  humidity: [],       // arrayy
   createdAt: Date,
 };
